@@ -81,10 +81,10 @@ module.exports = {
                 // trackingId: `ADD YOUR TRACKING ID HERE`,
             },
         },
-        `gatsby-plugin-react-helmet`,
+        `gatsby-plugin-react-helmet`, //<head>'s custom content
         `gatsby-plugin-sharp`,// enhance and size images
-        `gatsby-plugin-styled-components`,
-        `gatsby-plugin-typescript`,
+        `gatsby-plugin-styled-components`, //enables patterns of styled components
+        `gatsby-plugin-typescript`, // OF COURSE
         `gatsby-transformer-sharp`, // enhance and size images
     ],
 };
