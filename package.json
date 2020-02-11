@@ -1,20 +1,9 @@
 {
-  "name": "nvega.me",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "gatsby build",
+    "deploy": "gatsby build --prefix-paths",
+    "dev": "gatsby develop"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/nvegater/nvegater.me.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/nvegater/nvegater.me/issues"
-  },
-  "homepage": "https://github.com/nvegater/nvegater.me#readme"
+  "license": "ISC"
 }
