@@ -1,4 +1,4 @@
-const path = require(`path`)
+const path = require(`path`);
 const {createFilePath} = require(`gatsby-source-filesystem`);
 /*
 *
@@ -28,45 +28,53 @@ exports.createPages = ({graphql, actions}) => {
           }
         }
       }
-    `,
+    `, /* Async call. Each Markdown file will has frontmatter with some fields
+            FrontMAtter es la parte lateral de los libros. como metadata
+            (tags, title, published, date, category etc...)
+            Every page needs these, or there is an error.
+            Tags and titles are now required in each post.
+
+            */
     ).then(result => {
         if (result.errors) {
             throw result.errors
         }
 
         // Get the templates
-        const postTemplate = path.resolve(`./src/templates/post.tsx`)
-        const tagTemplate = path.resolve('./src/templates/tag.tsx')
+        const postTemplate = path.resolve(`./src/templates/post.tsx`);
+        const tagTemplate = path.resolve('./src/templates/tag.tsx'); // TODO construct templates
 
         // Create post pages
-        const posts = result.data.allMarkdownRemark.edges
+        const posts = result.data.allMarkdownRemark.edges; // take the posts from the GraphQLQuery
         posts.forEach((post, index) => {
-            const previous = index === posts.length - 1 ? null : posts[index + 1].node
-            const next = index === 0 ? null : posts[index - 1].node
+            const previous = index === posts.length - 1 ? null : posts[index + 1].node;
+            const next = index === 0 ? null : posts[index - 1].node;
 
             actions.createPage({
                 path: post.node.fields.slug,
                 component: postTemplate,
                 context: {
                     slug: post.node.fields.slug,
-                    previous,
+                    previous, /*previous and next passed to the context. Each of the context fields
+                                Will be transformed to props we can use in react templates.
+                                Previous and next allows us to build a carousel in footer of pages*/
                     next,
                 },
             })
-        })
+        });
 
         // Iterate through each post, putting all found tags into `tags`
-        let tags = []
+        let tags = [];
         posts.forEach(post => {
             if (post.node.frontmatter.tags) {
                 tags = tags.concat(post.node.frontmatter.tags)
             }
-        })
-        const uniqTags = [...new Set(tags)]
+        });
+        const uniqTags = [...new Set(tags)]; //Make Tags unique with Set so that there are no duplicates
 
         // Create tag pages
         uniqTags.forEach(tag => {
-            if (!tag) return
+            if (!tag) return;
             actions.createPage({
                 path: `/tags/${tag}/`,
                 component: tagTemplate,
@@ -78,7 +86,8 @@ exports.createPages = ({graphql, actions}) => {
     })
 };
 
-exports.onCreateNode = ({node, actions, getNode}) => {
+exports.onCreateNode = ({node, actions, getNode}) => { // Slug is a simplified name (directory friendly)
+    // Generate a slug for each created node.
     if (node.internal.type === `MarkdownRemark`) {
         const value = createFilePath({node, getNode});
         actions.createNodeField({
