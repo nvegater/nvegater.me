@@ -29,7 +29,7 @@ interface LayoutProps {
 }
 
 const Layout: FC<LayoutProps> = ({children, title}) => {
-
+  console.log(title);
   return (
     <>
       <GlobalStyle/>
