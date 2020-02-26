@@ -32,8 +32,8 @@ const graphqlQuery =
 interface HeadProps {
   readonly title: string
   readonly description?: string
-  readonly lang?: string
-  readonly keywords?: string[];
+  readonly lang: string | "en" // Standard is English
+  readonly keywords: string[] | [];
   children: ReactNode;
 }
 
@@ -50,15 +50,54 @@ const Head:FC<HeadProps> = ({
   <StaticQuery
     query={graphqlQuery}
     render={(data:StaticQueryData) => {
-      console.log("Coming from the graphqlQuery", data);
+      const metaDescription = description || data.site.siteMetadata.description;
       return (
         <Helmet
           htmlAttributes={{lang}}
           title={title}
           titleTemplate={`%s | ${data.site.siteMetadata.title}`}
-        >
-
-        </Helmet>
+          meta={
+            [
+              {
+                name: `description`,
+                content: metaDescription,
+              },
+              {
+                property: `og:title`,
+                content: title,
+              },
+              {
+                property: `og:description`,
+                content: metaDescription,
+              },
+              {
+                property: `og:type`,
+                content: `website`,
+              },
+              {
+                name: `twitter:card`,
+                content: `summary`,
+              },
+              {
+                name: `twitter:creator`,
+                content: data.site.siteMetadata.author.name,
+              },
+              {
+                name: `twitter:title`,
+                content: title,
+              },
+              {
+                name: `twitter:description`,
+                content: metaDescription,
+              },
+            ].concat(
+              keywords.length > 0 ? {
+                name: 'keyboards',
+                content: keywords.join(', ')
+              } : []
+            )
+          }
+        />
       )
     }}
   />
