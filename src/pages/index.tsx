@@ -1,2 +1,2 @@
 // TODO add index page
-import React from 'react'
+export {} // just to avoid TS errors when file is empty
