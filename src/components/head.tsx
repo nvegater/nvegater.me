@@ -1,7 +1,8 @@
-import React, {FC} from 'react';
+import React, {FC, ReactNode} from 'react';
 import Helmet from 'react-helmet';
-import {StaticQuery, graphql, useStaticQuery} from 'gatsby';
+import {StaticQuery, graphql} from 'gatsby';
 
+// TODO move query to graphQL file, configure top level schema. https://github.com/jimkyndemeyer/graphql-config-examples/tree/master/remote-schema-introspection
 type StaticQueryData = {
   site: {
     siteMetadata: {
@@ -13,30 +14,8 @@ type StaticQueryData = {
     }
   }
 }
-
-interface HeadProps {
-  readonly title: string
-  readonly description?: string
-  readonly lang?: string
-  readonly keywords?: string[]
-}
-
-interface Site {
-  siteMetadata: {
-    authorName: string
-    description: string
-    siteUrl: string
-    title: string
-  }
-}
-
-interface LayoutQueryData {
-  site: Site
-}
-
-// TODO move query to graphQL file, configure top level schema. https://github.com/jimkyndemeyer/graphql-config-examples/tree/master/remote-schema-introspection
 const graphqlQuery =
-graphql`
+  graphql`
   query {
     site {
       siteMetadata {
@@ -49,70 +28,39 @@ graphql`
     }
   }
 `;
-const useLayoutQuery = (): StaticQueryData => {
-  const {site}: LayoutQueryData = useStaticQuery(graphqlQuery);
-  return { site }
-};
 
-const Head:FC<HeadProps> = ({title,description,lang,keywords}) =>{
+interface HeadProps {
+  readonly title: string
+  readonly description?: string
+  readonly lang?: string
+  readonly keywords?: string[];
+  children: ReactNode;
+}
 
-  const {site} = useLayoutQuery();
+const Head:FC<HeadProps> = ({
+                              title,
+                              description,
+                              lang,
+                              keywords,
+                              children}) => {
+
+  console.log(description, keywords, children);
+
   return (
   <StaticQuery
     query={graphqlQuery}
-    render={ ():StaticQueryData => {
-      const {site}: Site = useStaticQuery(graphqlQuery);
+    render={(data:StaticQueryData) => {
+      console.log("Coming from the graphqlQuery", data);
       return (
         <Helmet
-          htmlAttributes={{
-            lang,
-          }}
+          htmlAttributes={{lang}}
           title={title}
           titleTemplate={`%s | ${data.site.siteMetadata.title}`}
-          meta={[
-            {
-              name: `description`,
-              content: metaDescription,
-            },
-            {
-              property: `og:title`,
-              content: title,
-            },
-            {
-              property: `og:description`,
-              content: metaDescription,
-            },
-            {
-              property: `og:type`,
-              content: `website`,
-            },
-            {
-              name: `twitter:card`,
-              content: `summary`,
-            },
-            {
-              name: `twitter:creator`,
-              content: data.site.siteMetadata.author.name,
-            },
-            {
-              name: `twitter:title`,
-              content: title,
-            },
-            {
-              name: `twitter:description`,
-              content: metaDescription,
-            },
-          ].concat(
-            keywords.length > 0
-              ? {
-                name: `keywords`,
-                content: keywords.join(`, `),
-              }
-              : [],
-          )}
-        />
+        >
+
+        </Helmet>
       )
-    }}}
+    }}
   />
   );
 };
