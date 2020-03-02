@@ -1,4 +1,4 @@
-import React, {FC, ReactNode} from 'react';
+import React, {FC} from 'react';
 import Helmet from 'react-helmet';
 import {StaticQuery, graphql} from 'gatsby';
 
@@ -92,9 +92,8 @@ const metaForHelmet = (
 interface HeadProps {
   readonly title: string
   readonly description?: string
-  readonly lang: string | "en" // Standard is English
-  readonly keywords: string[] | [];
-  children: ReactNode;
+  readonly lang?: string;
+  readonly keywords?: string[];
 }
 
 const Head: FC<HeadProps> = ({
@@ -102,10 +101,9 @@ const Head: FC<HeadProps> = ({
                                description,
                                lang,
                                keywords,
-                               children
                              }) => {
 
-  console.log(description, keywords, children);
+  console.log(description, keywords);
 
   return (
     <StaticQuery
@@ -113,11 +111,13 @@ const Head: FC<HeadProps> = ({
       render={
         (data: StaticQueryData) => {
           const metaDescription = description || data.site.siteMetadata.description;
+          const keyWords = keywords !== undefined ? keywords : [];
+          const langDefined = lang !== undefined ? lang : 'en';
           return (
             <Helmet
-              htmlAttributes={{lang}} title={title} titleTemplate={`%s | ${data.site.siteMetadata.title}`}
+              htmlAttributes={{langDefined}} title={title} titleTemplate={`%s | ${data.site.siteMetadata.title}`}
               meta={
-                metaForHelmet(metaDescription,title,data.site.siteMetadata.author.name,keywords)
+                metaForHelmet(metaDescription,title,data.site.siteMetadata.author.name,keyWords)
               }/>
           )
         }
