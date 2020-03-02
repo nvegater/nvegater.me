@@ -9,6 +9,20 @@ const {createFilePath} = require(`gatsby-source-filesystem`);
 *
 * this provides a Resource containing the rendered Markdown.
 *
+* Gatsby will first look for a corresponding page created via createPages in this file
+* If it doesn’t find the page there it will next look for a page in
+* src/pages.
+*
+* According to the Gatsby structure docs:
+* "Components under src/pages become pages automatically with paths based on their file name."
+* For example, if a user goes to /about, Gatsby will try to find src/pages/about.tsx.
+*
+* Each page in the src/pages folder should export a default React component.
+* Additionally, it can export a pageQuery constant.
+* The pageQuery constant is a GraphQL query that will be executed prior to rendering the component.
+*
+* The results from the query will be passed into the component as a prop called data.
+*
 */
 exports.createPages = ({graphql, actions}) => {
     return graphql(
