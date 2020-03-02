@@ -14,6 +14,8 @@ type StaticQueryData = {
     }
   }
 }
+
+// this query access siteMetadata in gatsby-config.js.
 const graphqlQuery =
   graphql`
   query {
@@ -28,6 +30,64 @@ const graphqlQuery =
     }
   }
 `;
+
+const metaForHelmet = (
+  metaDescription:string,
+  title:string,
+  authorName:string,
+  keywords: string[] | []
+) => {
+  let metaProps = [
+    {
+      name: `description`,
+      content: metaDescription,
+    },
+    {
+      property: `og:title`,
+      content: title,
+    },
+    {
+      property: `og:description`,
+      content: metaDescription,
+    },
+    {
+      property: `og:type`,
+      content: `website`,
+    },
+    {
+      name: `twitter:card`,
+      content: `summary`,
+    },
+    {
+      name: `twitter:creator`,
+      content: authorName,
+    },
+    {
+      name: `twitter:title`,
+      content: title,
+    },
+    {
+      name: `twitter:description`,
+      content: metaDescription,
+    },
+  ];
+
+  let keyWordsAvailable = keywords.length > 0;
+  let metaPropsWithKeywords;
+
+  if (keyWordsAvailable){
+    metaPropsWithKeywords = metaProps.concat(
+      {
+        name: 'keywords',
+        content: keywords.join(', ')
+      }
+    );
+  }
+
+  return metaPropsWithKeywords;
+
+};
+
 
 interface HeadProps {
   readonly title: string
@@ -57,45 +117,7 @@ const Head: FC<HeadProps> = ({
             <Helmet
               htmlAttributes={{lang}} title={title} titleTemplate={`%s | ${data.site.siteMetadata.title}`}
               meta={
-                [
-                  {
-                    name: `description`,
-                    content: metaDescription,
-                  },
-                  {
-                    property: `og:title`,
-                    content: title,
-                  },
-                  {
-                    property: `og:description`,
-                    content: metaDescription,
-                  },
-                  {
-                    property: `og:type`,
-                    content: `website`,
-                  },
-                  {
-                    name: `twitter:card`,
-                    content: `summary`,
-                  },
-                  {
-                    name: `twitter:creator`,
-                    content: data.site.siteMetadata.author.name,
-                  },
-                  {
-                    name: `twitter:title`,
-                    content: title,
-                  },
-                  {
-                    name: `twitter:description`,
-                    content: metaDescription,
-                  },
-                ].concat(
-                  keywords.length > 0 ? {
-                    name: 'keyboards',
-                    content: keywords.join(', ')
-                  } : []
-                )
+                metaForHelmet(metaDescription,title,data.site.siteMetadata.author.name,keywords)
               }/>
           )
         }
