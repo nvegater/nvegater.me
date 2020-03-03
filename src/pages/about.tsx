@@ -24,7 +24,7 @@ interface Props {
 }
 
 // TODO this is just a placeholder, is an aexample of how to add pages.
-const Tags:FC<Props> = ({data})=>{
+const About:FC<Props> = ({data})=>{
 
   const siteTitle = data.site.siteMetadata.title;
 
@@ -38,4 +38,4 @@ const Tags:FC<Props> = ({data})=>{
   );
 };
 
-export default Tags;
+export default About;
