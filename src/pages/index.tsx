@@ -55,6 +55,7 @@ export const pageQuery = graphql`
   }
 `;
 
+// pages in Gatsby are given as input the result of a GraphQL Query.
 interface Props {
   readonly data: PageQueryData;
 }
