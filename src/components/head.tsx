@@ -16,6 +16,8 @@ type StaticQueryData = {
 }
 
 // this query access siteMetadata in gatsby-config.js.
+// pageQuery is executed always before the component is being rendered
+// TODO rename?
 const graphqlQuery =
   graphql`
   query {

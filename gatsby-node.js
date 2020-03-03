@@ -64,6 +64,10 @@ exports.createPages = ({graphql, actions}) => {
             const previous = index === posts.length - 1 ? null : posts[index + 1].node;
             const next = index === 0 ? null : posts[index - 1].node;
 
+            /*
+           passed a previous and next field (optional) to the context
+           so that we generate a carousel at the bottom of each post.
+            * */
             actions.createPage({
                 path: post.node.fields.slug,
                 component: postTemplate,
@@ -84,10 +88,10 @@ exports.createPages = ({graphql, actions}) => {
                 tags = tags.concat(post.node.frontmatter.tags)
             }
         });
-        const uniqTags = [...new Set(tags)]; //Make Tags unique with Set so that there are no duplicates
+        const uniqueTags = [...new Set(tags)]; //Make Tags unique with Set so that there are no duplicates
 
         // Create tag pages
-        uniqTags.forEach(tag => {
+        uniqueTags.forEach(tag => {
             if (!tag) return;
             actions.createPage({
                 path: `/tags/${tag}/`,

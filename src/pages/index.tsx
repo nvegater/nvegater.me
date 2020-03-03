@@ -27,7 +27,7 @@ interface PageQueryData {
     }[]
   }
 }
-
+// pageQuery is executed always before the component is being rendered
 export const pageQuery = graphql`
   query {
     site {
