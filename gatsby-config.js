@@ -64,7 +64,7 @@ module.exports = {
             },
         },
         {
-            resolve: `gatsby-plugin-manifest`, //
+            resolve: `gatsby-plugin-manifest`, // only static asset so far
             options: {
                 name: `Nicolas Vega Terrazas`,
                 short_name: `Nico`,
@@ -74,6 +74,9 @@ module.exports = {
                 display: `minimal-ui`,
                 icon: `static/logo.png`,
             },
+          //import Logo from '../../static/logo.png'
+          //<img src={Logo} width={24} />
+          //https://www.gatsbyjs.org/docs/importing-assets-into-files/
         },
         {
             resolve: `gatsby-plugin-google-analytics`, // to inject all Google analytics scripts
