@@ -54,9 +54,7 @@ const Layout: FC<LayoutProps> = ({children, title}) => {
       </main>
       <StyledFooter>
         © {new Date().getFullYear()},{` `}
-        <a href="https://github.com/nvegater">github.com/nvegater</a>. Built with
-        {` `}
-        <a href="https://www.gatsbyjs.org">Gatsby</a>
+        <a href="https://github.com/nvegater">github.com/nvegater</a>
       </StyledFooter>
     </>
   );

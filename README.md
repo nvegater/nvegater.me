@@ -15,8 +15,9 @@ Mainly 3 "tools" are being used to build this website:
 
 The main purposes are:
 
-* Learn Graphql and Gatsby (react I kind of know good enough to get paid).
-* Create a portfolio and blog
+* Learn Graphql and Gatsby.
+* Improve React skills.
+* Create a portfolio and blog to register the learning process.
 
 
 
