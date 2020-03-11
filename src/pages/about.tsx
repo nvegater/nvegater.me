@@ -32,7 +32,7 @@ const About:FC<Props> = ({data})=>{
     <Layout title={siteTitle}>
       <Head title="All Tags" keywords={[`blog`, `gatsby`, `javascript`, `react`]}/>
       <article>
-        This is just an article
+      No more text for you
       </article>
     </Layout>
   );

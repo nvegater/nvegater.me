@@ -20,10 +20,14 @@ The main purposes are:
 
 * Learn Graphql, Gatsby and MDX.
 * Improve React skills.
-* Create a portfolio and blog to register the learning process.
-* Get used to using MDX, a very powerful underrated tool. to use React components in Markdown files.
+* Create a portfolio + blog
+* Improve learning process.
+* Learn how to build interactive Visualisations as in this
+[awesome article](http://worrydream.com/#!2/LadderOfAbstraction)
 
 
+
+Also, my cousin made this logo that I use for testing:
 
 ![Logo](../assets/logo.png)
 
