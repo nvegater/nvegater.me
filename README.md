@@ -19,6 +19,8 @@ The main purposes are:
 * Improve React skills.
 * Create a portfolio and blog to register the learning process.
 
-
+$$\int_\Omega \nabla u \cdot \nabla v~dx = \int_\Omega fv~dx$$
+Reminder to checkout how to render LATEX equations as said
+[here](https://paperhive.org/help/markdown)
 
 ![Logo](../assets/logo.png)
