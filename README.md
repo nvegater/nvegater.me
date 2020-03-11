@@ -1,12 +1,3 @@
----
-title: README
-date: '2019-03-11'
-published: true
-layout: post
-tags: ['information', 'gatsby', 'graphql']
-category: example
----
-
 Welcome to my site!
 
 ```js
@@ -30,5 +21,3 @@ The main purposes are:
 
 
 ![Logo](../assets/logo.png)
-
-

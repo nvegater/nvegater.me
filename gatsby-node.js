@@ -42,21 +42,15 @@ exports.createPages = ({graphql, actions}) => {
           }
         }
       }
-    `, /* Async call. Each Markdown file will has frontmatter with some fields
-            FrontMAtter es la parte lateral de los libros. como metadata
-            (tags, title, published, date, category etc...)
-            Every page needs these, or there is an error.
-            Tags and titles are now required in each post.
-
-            */
-    ).then(result => {
+    `).then(result => {
         if (result.errors) {
             throw result.errors
         }
-
-        // Get the templates
         const postTemplate = path.resolve(`./src/templates/post.tsx`);
-        const tagTemplate = path.resolve('./src/templates/tag.tsx'); // TODO construct templates
+        const tagTemplate = path.resolve('./src/templates/tag.tsx');
+
+      console.log(postTemplate);
+      console.log(tagTemplate);
 
         // Create post pages
         const posts = result.data.allMarkdownRemark.edges; // take the posts from the GraphQLQuery
@@ -106,6 +100,8 @@ exports.createPages = ({graphql, actions}) => {
 
 exports.onCreateNode = ({node, actions, getNode}) => { // Slug is a simplified name (directory friendly)
     // Generate a slug for each created node.
+
+  console.log("creating");
     if (node.internal.type === `MarkdownRemark`) {
         const value = createFilePath({node, getNode});
         actions.createNodeField({
