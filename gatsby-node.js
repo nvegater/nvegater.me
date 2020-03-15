@@ -24,6 +24,8 @@ const {createFilePath} = require(`gatsby-source-filesystem`);
 * The results from the query will be passed into the component as a prop called data.
 *
 */
+
+
 exports.createPages = ({graphql, actions}) => {
     return graphql(
         `
