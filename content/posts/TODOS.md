@@ -7,6 +7,8 @@ tags: ['todo']
 category: example
 ---
 
-* Create a Page to refer to all the links in this page.
-* A page for TODOs
-*
+[  In Progress ] Create a Page to refer to all the links in this page.
+
+[ Done ] A page for TODOs
+
+[  Backlog ] Render Math equations: https://using-remark.gatsbyjs.org/katex/
