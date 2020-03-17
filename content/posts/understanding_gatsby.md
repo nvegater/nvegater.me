@@ -28,7 +28,7 @@ so navigating through a site feels very fast.
 
 At least my reasoning:
 * No need of compiling files while the user is on the page. FAST AF
-* Git and MDX for content updates. [mdx???](./understanding_mdx.md)
+* Git and MDX for content updates. [(mdx?)](/understanding_mdx/)
 
 There are more advantages I cant confirm yet:
 * Delegation of server side and database operations to Gatsby
