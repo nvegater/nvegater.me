@@ -89,5 +89,17 @@ module.exports = {
         `gatsby-plugin-styled-components`, //enables patterns of styled components
         `gatsby-plugin-typescript`, // OF COURSE
         `gatsby-transformer-sharp`, // enhance and size images
+        {
+          /*
+          * intercepts local links from Markdown
+          * and other non-react pages
+          * and does a client-side pushState
+          * to avoid the browser having to refresh the page.
+          * */
+          resolve: `gatsby-plugin-catch-links`,
+          options: {
+          },
+        },
+
     ],
 };
