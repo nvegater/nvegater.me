@@ -1,13 +1,18 @@
 ---
-title: Gatsby nodes WTF
-date: '2019-03-17'
+title: Gatsby
+date: '2019-03-26'
 published: true
 layout: post
 tags: ['information', 'gatsby']
 category: example
 ---
 
-## What is gatsby and more importantly, why?
+## Why?
+
+While you're sleeping or enjoying a landing page, Gatsby pre-fetches resources under the hood.
+
+Gatsby is "secretely cooking" content in advance without your consent.
+Since the content is pre-cooked, it gets delivered faster, making the website feel more responsive.
 
 > Gatsby.js is a static PWA (Progressive Web App) generator.
 > It pulls only the critical HTML, CSS, data, and JavaScript
@@ -15,60 +20,58 @@ category: example
 
 > -said by [this guys](https://snipcart.com/blog/choose-best-static-site-generator)
 
-Basically it means frontend without databases and servers.
+Potentially it means frontend without databases and servers.
 Gatsby builds the whole site as static files,
 including dynamic content.
 
-When one page loads, Gatsby pre-fetches resources
-for other pages under the hood,
-so navigating through a site feels very fast.
-(also when re-opening the site, all resources will be cached automatically)
-
-### Why use this features?
-
-At least my reasoning:
-* No need of compiling files while the user is on the page. FAST AF
-* Git and MDX for content updates. [(mdx?)](/understanding_mdx/)
-
-There are more advantages I cant confirm yet:
-* Delegation of server side and database operations to Gatsby
-(instead of that, using graphQL to pull data to the website).
-* Lesser complexity: seems like everyone agrees. Yet to be seen.
+## Other advantages I like
 
 
-I built this site copy pasting (almost) everything from
-[this Gatsby-Typescript tutorial](https://jeffrafter.com/gatsby-with-typescript/ "Tutorial gatsby-typescript-graphql").
+* Git for website content changes.
+* MDX (.. oh boy [mdx](/understanding_mdx/) )
+* Instead of server side and database operations, delegation to Gatsby and GraphQL
 
-It worked out fine, but I dont understand exactly how some stuff function under the hood.
+## Understanding Gatsby
+
+
+The end of [this Gatsby-Typescript tutorial](https://jeffrafter.com/gatsby-with-typescript/ "Tutorial gatsby-typescript-graphql")
+will be the starting point.
+
+Excellent tutorial but it doesnt go in depth.
 Specially regarding the configuration in `gatsby-node.js` (check it in
 [here](https://github.com/nvegater/nvegater.me/blob/master/gatsby-node.js))
 
-## `gatsby-node.js`
-I will try to break `gatsby-node.js` down.
-Starting with:
+## Exposing `gatsby-node.js`
+
+The Gatsby API is requiring `gatsby-node.js`, therefore the methods in there will be exposed to it.
+
+
+These 2 methods are returned to Gatsby [as the result of a require call:](https://stackoverflow.com/questions/5311334/what-is-the-purpose-of-node-js-module-exports-and-how-do-you-use-it)
+
 ```js
 exports.createPages = ({graphql, actions}) => {....}
 exports.onCreateNode = ({node, actions, getNode}) => { ...}
 ```
 
-Firstly understanding `exports...` seemed essential to me. So I found
-[this great Stack Overflow answer](https://stackoverflow.com/questions/5311334/what-is-the-purpose-of-node-js-module-exports-and-how-do-you-use-it)
-. In summary `createPages()` and `onCreateNode()` will be exposed to any internal code in the application
-that requires the `gatsby-node.js`.
-This two methods will be exposed, so the Gatsby API can call them.
-What for? So Plugins like:
-```js
-const {createFilePath} = require(`gatsby-source-filesystem`);
-```
-can add pages.
-[more Details ->](https://www.gatsbyjs.org/tutorial/part-seven/)
+### `onCreateNode()`
 
-Since `exports.createPages = ({graphql, actions}) => {....}` is implemented first
-I will start there.
+Called by Gatsby everytime a new node is created. Okay...
+What is a node? how it gets created?
 
-The usual approach when using react is
-to create `.tsx` React components in `src/pages`.
+### `createPages()`
+
+The usual approach to add stuff to a website with react would be
+to create a `<ReactComponents />.tsx` in `src/pages` folder.
+
+
 Gatsy can do this differently, they called this
 "creating pages programatically from data".
+
+### End
+
+
+[more Details](https://www.gatsbyjs.org/tutorial/part-seven/)
+
+
 
 
