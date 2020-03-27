@@ -3,6 +3,8 @@ import {graphql, Link} from "gatsby";
 import Layout from "../components/Layout";
 import Head from "../components/head";
 import styled from "styled-components";
+import Img, {FluidObject} from "gatsby-image";
+
 interface PageQueryData {
   site: {
     siteMetadata: {
@@ -16,6 +18,11 @@ interface PageQueryData {
     frontmatter: {
       title: string
       date: string
+      featuredImage?: {
+        childImageSharp: {
+          fluid: FluidObject;
+        }
+      };
     }
   }
 }
@@ -36,6 +43,13 @@ export const pageQuery = graphql`
       frontmatter {
         title
         date(formatString: "MMMM DD, YYYY")
+        featuredImage {
+          childImageSharp {
+            fluid(maxWidth: 600) {
+              ...GatsbyImageSharpFluid
+            }
+          }
+        }
       }
     }
   }
@@ -62,6 +76,12 @@ const PostTemplate:FC<Props> = ({data,pageContext})=>{
 
   const siteTitle = data.site.siteMetadata.title;
   const post = data.markdownRemark;
+
+  let featuredImgFluid:FluidObject | undefined =
+    data.markdownRemark.frontmatter.featuredImage !== undefined ?
+      data.markdownRemark.frontmatter.featuredImage?.childImageSharp.fluid :
+      undefined;
+
   const {previous,next} = pageContext;
 
   return(
@@ -73,6 +93,10 @@ const PostTemplate:FC<Props> = ({data,pageContext})=>{
           <p>{post.frontmatter.date}</p>
         </header>
         <div className={`page-content`}>
+          {
+            featuredImgFluid !== undefined &&
+            <Img fluid={featuredImgFluid}/>
+          }
           <div dangerouslySetInnerHTML={{__html: post.html}} />
           {/*https://stackoverflow.com/questions/7381974/which-characters-need-to-be-escaped-in-html*/}
           {/*https://zhenyong.github.io/react/tips/dangerously-set-inner-html.html*/}
