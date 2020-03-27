@@ -1,5 +1,5 @@
 ---
-title: Understanding MDX
+title: MDX
 date: '2019-03-11'
 published: true
 layout: post
@@ -23,3 +23,9 @@ I was impressed by this combination the first time because Daniel Eden, the main
 [uses MDX](https://github.com/daneden)
 in his
 [website](https://daneden.me/).
+
+Then I started investigating more about it. I stumbled upon this [article,](https://css-tricks.com/an-introduction-to-mdxjs/)
+which pretty much explains better than me, how powerful MDX is. It also shows a lot of use cases.
+
+My favourite until now is ["Up and down the ladder of abstraction"](http://worrydream.com/#!2/LadderOfAbstraction)
+by Victor Bret. Thats more or less my goal for MDX.
