@@ -3,7 +3,7 @@ import {graphql, Link} from "gatsby";
 import Layout from "../components/Layout";
 import Head from "../components/head";
 import styled from "styled-components";
-import Img, {FluidObject} from "gatsby-image";
+import Img, {FixedObject, FluidObject} from "gatsby-image";
 
 interface PageQueryData {
   site: {
@@ -21,6 +21,7 @@ interface PageQueryData {
       featuredImage?: {
         childImageSharp: {
           fluid: FluidObject;
+          fixed: FixedObject;
         }
       };
     }
@@ -45,8 +46,11 @@ export const pageQuery = graphql`
         date(formatString: "MMMM DD, YYYY")
         featuredImage {
           childImageSharp {
-            fluid(maxWidth: 600) {
+            fluid(maxWidth: 1000, quality: 100) {
               ...GatsbyImageSharpFluid
+            }
+            fixed(width: 125, height: 125) {
+              ...GatsbyImageSharpFixed
             }
           }
         }
@@ -62,7 +66,7 @@ const StyledUl = styled('ul')`
     content: '' !important;
     padding-right: 0 !important;
   }
-`
+`;
 
 interface Props {
   readonly data: PageQueryData
@@ -82,6 +86,11 @@ const PostTemplate:FC<Props> = ({data,pageContext})=>{
       data.markdownRemark.frontmatter.featuredImage?.childImageSharp.fluid :
       undefined;
 
+ /* let fixedImage:FixedObject | undefined =
+    data.markdownRemark.frontmatter.featuredImage !== undefined ?
+      data.markdownRemark.frontmatter.featuredImage?.childImageSharp.fixed :
+      undefined;*/
+
   const {previous,next} = pageContext;
 
   return(
@@ -97,6 +106,10 @@ const PostTemplate:FC<Props> = ({data,pageContext})=>{
             featuredImgFluid !== undefined &&
             <Img fluid={featuredImgFluid}/>
           }
+          {/*{
+            fixedImage !== undefined &&
+            <Img fixed={fixedImage}/>
+          }*/}
           <div dangerouslySetInnerHTML={{__html: post.html}} />
           {/*https://stackoverflow.com/questions/7381974/which-characters-need-to-be-escaped-in-html*/}
           {/*https://zhenyong.github.io/react/tips/dangerously-set-inner-html.html*/}
