@@ -43,10 +43,11 @@ Specially regarding the configuration in `gatsby-node.js` (check it in
 
 ## Exposing `gatsby-node.js`
 
-The Gatsby API is requiring `gatsby-node.js`, therefore the methods in there will be exposed to it.
-
+The Gatsby API[^dotfiles] is requiring `gatsby-node.js`, therefore the methods in there will be exposed to it.
 
 These 2 methods are returned to Gatsby [as the result of a require call:](https://stackoverflow.com/questions/5311334/what-is-the-purpose-of-node-js-module-exports-and-how-do-you-use-it)
+
+[^dotfiles]: hola [this is google](www.google.com)
 
 ```js
 exports.createPages = ({graphql, actions}) => {....}
@@ -55,8 +56,22 @@ exports.onCreateNode = ({node, actions, getNode}) => { ...}
 
 ### `onCreateNode()`
 
-Called by Gatsby everytime a new node is created. Okay...
-What is a node? how it gets created?
+Called by Gatsby everytime a new node is created.
+A node is only a fancy name for an object in a "graph":
+
+To illustrate, type following query in this [link](http://localhost:8000/___graphql):
+
+```graphql
+{
+  allFile {
+    edges {
+      node {
+        id
+      }
+    }
+  }
+}
+```
 
 ### `createPages()`
 

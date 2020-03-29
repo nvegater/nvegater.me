@@ -48,17 +48,35 @@ exports.createPages = ({graphql, actions}) => {
         if (result.errors) {
             throw result.errors
         }
+
+        /*
+          This basically turns this: `./src/templates/post.tsx`
+          into this:
+          /Users/admin-p00920345/dev/nvegater.me/src/templates/post.tsx
+          So resolves the '.' into something that fits the computer (or server) where the page is running
+          It depends on the operating system. With windows it gets super tricky. because the paths are different
+        * */
         const postTemplate = path.resolve(`./src/templates/post.tsx`);
+        console.log("Path for post template",postTemplate);
         const tagTemplate = path.resolve('./src/templates/tag.tsx');
+        console.log("Path for tag template",tagTemplate);
 
-      console.log(postTemplate);
-      console.log(tagTemplate);
+        /*
+          Takes all the posts from the
+          content/posts/
+          directory
+/TODOS/
+/hello-world/
+/understanding_gatsby/
+/images/
+/understanding_mdx/
 
-        // Create post pages
-        const posts = result.data.allMarkdownRemark.edges; // take the posts from the GraphQLQuery
+          */
+        const posts = result.data.allMarkdownRemark.edges;
+
         posts.forEach((post, index) => {
-            const previous = index === posts.length - 1 ? null : posts[index + 1].node;
-            const next = index === 0 ? null : posts[index - 1].node;
+            const previousNode = index === posts.length - 1 ? null : posts[index + 1].node;
+            const nextNode = index === 0 ? null : posts[index - 1].node;
 
             /*
            passed a previous and next field (optional) to the context
@@ -69,10 +87,10 @@ exports.createPages = ({graphql, actions}) => {
                 component: postTemplate,
                 context: {
                     slug: post.node.fields.slug,
-                    previous, /*previous and next passed to the context. Each of the context fields
+                    previous: previousNode, /*previous and next passed to the context. Each of the context fields
                                 Will be transformed to props we can use in react templates.
                                 Previous and next allows us to build a carousel in footer of pages*/
-                    next,
+                    next: nextNode,
                 },
             })
         });
@@ -102,8 +120,6 @@ exports.createPages = ({graphql, actions}) => {
 
 exports.onCreateNode = ({node, actions, getNode}) => { // Slug is a simplified name (directory friendly)
     // Generate a slug for each created node.
-
-  console.log("creating");
     if (node.internal.type === `MarkdownRemark`) {
         const value = createFilePath({node, getNode});
         actions.createNodeField({
@@ -111,5 +127,6 @@ exports.onCreateNode = ({node, actions, getNode}) => { // Slug is a simplified n
             node,
             value,
         })
+        console.log("value created with createFilePath: ", value);
     }
 };

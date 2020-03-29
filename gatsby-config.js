@@ -49,6 +49,7 @@ module.exports = {
                     `gatsby-remark-prismjs`, //Syntax highlighting for codeblocks
                     `gatsby-remark-copy-linked-files`, // copy linked files on build
                     `gatsby-remark-smartypants`, //convert to smart Quotes aps.
+                    `gatsby-remark-tufte`
                 ],
             },
         },
