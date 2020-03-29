@@ -1,37 +1,6 @@
 import React, {FC} from 'react';
 import Helmet from 'react-helmet';
-import {StaticQuery, graphql} from 'gatsby';
-
-// TODO move query to graphQL file, configure top level schema. https://github.com/jimkyndemeyer/graphql-config-examples/tree/master/remote-schema-introspection
-type StaticQueryData = {
-  site: {
-    siteMetadata: {
-      title: string;
-      description: string;
-      author: {
-        name: string;
-      }
-    }
-  }
-}
-
-// this query access siteMetadata in gatsby-config.js.
-// pageQuery is executed always before the component is being rendered
-// TODO rename?
-const graphqlQuery =
-  graphql`
-  query {
-    site {
-      siteMetadata {
-        title
-        description
-        author {
-          name
-        }
-      }
-    }
-  }
-`;
+import {graphql, useStaticQuery} from 'gatsby';
 
 const metaForHelmet = (
   metaDescription:string,
@@ -91,6 +60,18 @@ const metaForHelmet = (
 };
 
 
+type StaticQueryData = {
+  site: {
+    siteMetadata: {
+      title: string;
+      description: string;
+      author: {
+        name: string;
+      }
+    }
+  }
+}
+
 interface HeadProps {
   readonly title: string
   readonly description?: string
@@ -105,26 +86,31 @@ const Head: FC<HeadProps> = ({
                                keywords,
                              }) => {
 
-  console.log(description, keywords);
-
-  return (
-    <StaticQuery
-      query={graphqlQuery}
-      render={
-        (data: StaticQueryData) => {
-          const metaDescription = description || data.site.siteMetadata.description;
-          const keyWords = keywords !== undefined ? keywords : [];
-          const langDefined = lang !== undefined ? lang : 'en';
-          return (
-            <Helmet
-              htmlAttributes={{langDefined}} title={title} titleTemplate={`%s | ${data.site.siteMetadata.title}`}
-              meta={
-                metaForHelmet(metaDescription,title,data.site.siteMetadata.author.name,keyWords)
-              }/>
-          )
+  const data:StaticQueryData = useStaticQuery(
+    graphql`
+      query {
+        site {
+          siteMetadata {
+            title
+            description
+            author {
+              name
+            }
+          }
         }
       }
-    />
+    `
+  );
+  const metaDescription = description || data.site.siteMetadata.description;
+  const keyWords = keywords !== undefined ? keywords : [];
+  const langDefined = lang !== undefined ? lang : 'en';
+
+  return (
+    <Helmet
+      htmlAttributes={{langDefined}} title={title} titleTemplate={`%s | ${data.site.siteMetadata.title}`}
+      meta={
+        metaForHelmet(metaDescription,title,data.site.siteMetadata.author.name,keyWords)
+      }/>
   );
 };
 
