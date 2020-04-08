@@ -149,3 +149,23 @@ exports.onCreatePage = async ({ page, actions }) => {
     createPage(page)
   }
 }
+
+exports.onCreateWebpackConfig = ({stage,loader,actions}) => {
+  if (stage === 'build-html'){
+    /* During the build step, "auth0-js" will break because it relies on browser-specific API'S
+    * Fortunately we dont need it during the build.
+    * Using webpack's null loader, we ignore auth0-js during build.
+    * (See src/utils/auth.js to see how we prevent this from breaking the app
+    * */
+    actions.setWebpackConfig({
+      module: {
+        rules: [
+          {
+            test: /auth0-js/,
+            use: loader.null()
+          }
+        ]
+      }
+    })
+  }
+}
