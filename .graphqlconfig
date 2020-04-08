@@ -1,0 +1,12 @@
+{
+  "name": "Nvegater App",
+  "schemaPath": "project_schema.graphql",
+  "extensions": {
+    "endpoints": {
+      "Remote GraphQL Endpoint": {
+        "url": "http://localhost:8000/___graphql",
+        "introspect": true
+      }
+    }
+  }
+}
