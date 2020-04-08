@@ -25,108 +25,127 @@ const {createFilePath} = require(`gatsby-source-filesystem`);
 *
 */
 
-
-exports.createPages = ({graphql, actions}) => {
-    return graphql(
-        `
-      {
-        allMarkdownRemark(sort: {fields: [frontmatter___date], order: DESC}, limit: 1000) {
-          edges {
-            node {
-              fields {
-                slug
-              }
-              frontmatter {
-                tags
-                title
-              }
-            }
+const nodesQuery = `
+  {
+    allMarkdownRemark(sort: {fields: [frontmatter___date], order: DESC}, limit: 1000) {
+      edges {
+        node {
+          fields {
+            slug
+          }
+          frontmatter {
+            tags
+            title
           }
         }
       }
-    `).then(result => {
-        if (result.errors) {
-            throw result.errors
-        }
+    }
+  }
+`
 
-        /*
-          This basically turns this: `./src/templates/post.tsx`
-          into this:
-          /Users/admin-p00920345/dev/nvegater.me/src/templates/post.tsx
-          So resolves the '.' into something that fits the computer (or server) where the page is running
-          It depends on the operating system. With windows it gets super tricky. because the paths are different
-        * */
-        const postTemplate = path.resolve(`./src/templates/post.tsx`);
-        console.log("Path for post template",postTemplate);
-        const tagTemplate = path.resolve('./src/templates/tag.tsx');
-        console.log("Path for tag template",tagTemplate);
 
-        /*
-          Takes all the posts from the
-          content/posts/
-          directory
-/TODOS/
-/hello-world/
-/understanding_gatsby/
-/images/
-/understanding_mdx/
+exports.createPages = ({graphql, actions}) => {
+  return graphql(nodesQuery).then(result => {
+    if (result.errors) {
+      throw result.errors
+    }
+    const markdownPosts = result.data.allMarkdownRemark.edges;
 
-          */
-        const posts = result.data.allMarkdownRemark.edges;
+    /*
+      This basically turns this: `./src/templates/post.tsx`
+      into this:
+      /Users/admin-p00920345/dev/nvegater.me/src/templates/post.tsx
+      So resolves the '.' into something that fits the computer (or server) where the page is running
+      It depends on the operating system. With windows it gets super tricky. because the paths are different
+    * */
 
-        posts.forEach((post, index) => {
-            const previousNode = index === posts.length - 1 ? null : posts[index + 1].node;
-            const nextNode = index === 0 ? null : posts[index - 1].node;
 
-            /*
-           passed a previous and next field (optional) to the context
-           so that we generate a carousel at the bottom of each post.
-            * */
-            actions.createPage({
-                path: post.node.fields.slug,
-                component: postTemplate,
-                context: {
-                    slug: post.node.fields.slug,
-                    previous: previousNode, /*previous and next passed to the context. Each of the context fields
+    const postTemplate = path.resolve(`./src/templates/post.tsx`);
+    console.log("Path for post template", postTemplate);
+    const tagTemplate = path.resolve('./src/templates/tag.tsx');
+    console.log("Path for tag template", tagTemplate);
+
+    /*
+      Takes all the posts from the
+      content/posts/
+      directory:
+
+      /TODOS/
+      /hello-world/
+      /understanding_gatsby/
+      /images/
+      /understanding_mdx/
+
+      */
+
+    markdownPosts.forEach((markdownPost, index) => {
+      const previousNode = index === markdownPosts.length - 1 ? null : markdownPosts[index + 1].node;
+      const nextNode = index === 0 ? null : markdownPosts[index - 1].node;
+
+      /*
+     passed a previous and next field (optional) to the context
+     so that we generate a carousel at the bottom of each post.
+      * */
+      actions.createPage({
+        path: markdownPost.node.fields.slug,
+        component: postTemplate,
+        context: {
+          slug: markdownPost.node.fields.slug,
+          previous: previousNode, /*previous and next passed to the context. Each of the context fields
                                 Will be transformed to props we can use in react templates.
                                 Previous and next allows us to build a carousel in footer of pages*/
-                    next: nextNode,
-                },
-            })
-        });
+          next: nextNode,
+        },
+      })
+    });
 
-        // Iterate through each post, putting all found tags into `tags`
-        let tags = [];
-        posts.forEach(post => {
-            if (post.node.frontmatter.tags) {
-                tags = tags.concat(post.node.frontmatter.tags)
-            }
-        });
-        const uniqueTags = [...new Set(tags)]; //Make Tags unique with Set so that there are no duplicates
+    // Iterate through each post, putting all found tags into `tags`
+    let tags = [];
+    markdownPosts.forEach(post => {
+      if (post.node.frontmatter.tags) {
+        tags = tags.concat(post.node.frontmatter.tags)
+      }
+    });
+    const uniqueTags = [...new Set(tags)]; //Make Tags unique with Set so that there are no duplicates
 
-        // Create tag pages
-        uniqueTags.forEach(tag => {
-            if (!tag) return;
-            actions.createPage({
-                path: `/tags/${tag}/`,
-                component: tagTemplate,
-                context: {
-                    tag,
-                },
-            })
-        })
+    // Create tag pages
+    uniqueTags.forEach(tag => {
+      if (!tag) return;
+      actions.createPage({
+        path: `/tags/${tag}/`,
+        component: tagTemplate,
+        context: {
+          tag,
+        },
+      })
     })
+
+  })
 };
 
 exports.onCreateNode = ({node, actions, getNode}) => { // Slug is a simplified name (directory friendly)
-    // Generate a slug for each created node.
-    if (node.internal.type === `MarkdownRemark`) {
-        const value = createFilePath({node, getNode});
-        actions.createNodeField({
-            name: `slug`,
+  // Generate a slug for each created node.
+  if (node.internal.type === `MarkdownRemark`) {
+    const value = createFilePath({node, getNode});
+    actions.createNodeField({
+      name: `slug`,
             node,
             value,
         })
         console.log("value created with createFilePath: ", value);
     }
 };
+
+// Implement the Gatsby API “onCreatePage”. This is
+// called after every page is created.
+exports.onCreatePage = async ({ page, actions }) => {
+  const { createPage } = actions
+  // Only update the `/app` page.
+  if (page.path.match(/^\/account/)) {
+    // page.matchPath is a special key that's used for matching pages
+    // with corresponding routes only on the client.
+    page.matchPath = "/account/*"
+    // Update the page.
+    createPage(page)
+  }
+}
