@@ -48,7 +48,7 @@ const Layout: FC<LayoutProps> = ({children, title}) => {
             <Link to={'/about'}>About</Link>
           </li>
           <li>
-            <Link to={'/account'}>Account</Link>
+            <Link to={'/login'}>Login</Link>
           </li>
         </ul>
       </StyledNav>
