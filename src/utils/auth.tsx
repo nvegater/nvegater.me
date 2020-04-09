@@ -50,17 +50,20 @@ export const login = () => {
 }
 
 export const logout = () => {
+  if (!isBrowser) {
+    console.log("Not Browser")
+    return;
+  }
   localStorage.setItem('isLoggedIn','false');
   profile = false;
 
-  const { protocol, host } = window.location;
-  const returnTo = `${protocol}//${host}`;
+  //const { protocol, host } = window.location;
+  //const returnTo = `${protocol}//${host}`;
+  const returnTo = `http://localhost:8000/logout`;
 
-  if (auth0!==undefined) {
-    auth0.logout({ returnTo });
-  } else {
-    console.log("Problem in logout. Auth is undefined")
-  }
+  auth0?.logout({
+    returnTo,
+  });
 }
 
 const setSession = (callback:any) => (err:any,auth0Result:any) => {
