@@ -8,6 +8,7 @@ interface BlockProps {
 
 const Block:FC<BlockProps> = ({block}) => {
 
+
   return (
       <ul>
         <li>Timestamp: {block.timestamp}</li>

@@ -1,7 +1,8 @@
 import React, {FC, useState} from 'react';
 import Layout from "../components/Layout";
 import BlockDisplay from "../components/block";
-import {Block, BlockChain, startGenesisBlock} from '../utils/blockchain'
+import BlockChainDisplay from "../components/blockchaindisplay";
+import {Block, BlockChain, lastBlockInChain, newBlock, startGenesisBlock} from '../utils/blockchain'
 
 
 const Blockchain:FC = () => {
@@ -9,8 +10,9 @@ const Blockchain:FC = () => {
   const [lastBlock,setLastBlock] = useState<Block>();
   const [lastBlockVisible,setLastBlockVisibility] = useState<boolean>(false);
 
-  const morethanOneBlock = blockChain.length > 1; // to enable the get latest block button. The Blockchain.
+  const emptyBlockChain = blockChain.length === 0; // to show the blockchain
   const atLeastOneBlock = blockChain.length > 0; // to show the blockchain
+  const morethanOneBlock = blockChain.length > 1; // to enable the get latest block button. The Blockchain.
 
   const handleBlockChainStart = () => {
     let firstBlockChain:BlockChain = [];
@@ -22,7 +24,7 @@ const Blockchain:FC = () => {
 
   const handleGetLatestBlock = () => {
     if (blockChain.length > 0) {
-      setLastBlock(blockChain[blockChain.length - 1]);
+      setLastBlock(lastBlockInChain(blockChain));
       setLastBlockVisibility(true)
     }
   }
@@ -32,34 +34,32 @@ const Blockchain:FC = () => {
   }
 
   const handleAddBlock = () => {
-
+    const block = newBlock(blockChain);
+    setBlockChain([...blockChain,block]);
   }
 
   return (
     <Layout title="Account">
-      <button onClick={handleBlockChainStart}>Start the blockchain</button>
       {
-        atLeastOneBlock &&
-          <>
-            {
-              blockChain.map((block:Block) => <BlockDisplay block={block}/>)
-            }
-            {
-              morethanOneBlock &&
-              <button onClick={handleGetLatestBlock}>See the last Block</button>
-            }
-            {
-              <button onClick={handleAddBlock}>Add a new block</button>
-            }
-          </>
+        emptyBlockChain &&
+        <button onClick={handleBlockChainStart}>Start the blockchain</button>
+      }
+      {
+        morethanOneBlock &&
+        <button onClick={handleGetLatestBlock}>See the last Block</button>
       }
       {
         lastBlock !== undefined && lastBlockVisible &&
-          <>
-            <BlockDisplay block={lastBlock}/>
-            <button onClick={handleHideLastBlock}>Hide the last Block</button>
-          </>
+        <button onClick={handleHideLastBlock}>Hide the last Block</button>
       }
+      {
+        atLeastOneBlock &&
+        <button onClick={handleAddBlock}>Add a new block</button>
+      }
+      {
+        lastBlock !== undefined && lastBlockVisible && <BlockDisplay block={lastBlock}/>
+      }
+      <BlockChainDisplay blockChain={blockChain}/>
     </Layout>
   )
 }
