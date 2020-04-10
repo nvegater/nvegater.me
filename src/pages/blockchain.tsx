@@ -9,6 +9,9 @@ const Blockchain:FC = () => {
   const [lastBlock,setLastBlock] = useState<Block>();
   const [lastBlockVisible,setLastBlockVisibility] = useState<boolean>(false);
 
+  const morethanOneBlock = blockChain.length > 1; // to enable the get latest block button. The Blockchain.
+  const atLeastOneBlock = blockChain.length > 0; // to show the blockchain
+
   const handleBlockChainStart = () => {
     let firstBlockChain:BlockChain = [];
     let firstBlock:Block = startGenesisBlock()
@@ -28,18 +31,28 @@ const Blockchain:FC = () => {
     setLastBlockVisibility(false)
   }
 
+  const handleAddBlock = () => {
+
+  }
+
   return (
     <Layout title="Account">
       <button onClick={handleBlockChainStart}>Start the blockchain</button>
       {
-        blockChain.length > 0 &&
-        blockChain.map((block:Block) => {
-          console.log("About to send: ",block)
-            return (<BlockDisplay block={block}/>)
-          }
-        )
+        atLeastOneBlock &&
+          <>
+            {
+              blockChain.map((block:Block) => <BlockDisplay block={block}/>)
+            }
+            {
+              morethanOneBlock &&
+              <button onClick={handleGetLatestBlock}>See the last Block</button>
+            }
+            {
+              <button onClick={handleAddBlock}>Add a new block</button>
+            }
+          </>
       }
-      <button onClick={handleGetLatestBlock}>See the last Block</button>
       {
         lastBlock !== undefined && lastBlockVisible &&
           <>
