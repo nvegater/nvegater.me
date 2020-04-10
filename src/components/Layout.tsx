@@ -20,7 +20,7 @@ const StyledNav = styled.nav`
 `;
 
 const StyledFooter = styled.footer`
-  padding-bottom: 36px;
+  padding-top: 50px;
 `;
 
 interface LayoutProps {
@@ -49,6 +49,9 @@ const Layout: FC<LayoutProps> = ({children, title}) => {
           </li>
           <li>
             <Link to={'/login'}>Login</Link>
+          </li>
+          <li>
+            <Link to={'/blockchain'}>Blockchain</Link>
           </li>
         </ul>
       </StyledNav>
