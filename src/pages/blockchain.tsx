@@ -1,6 +1,7 @@
 import React, {FC, useState} from 'react';
 import Layout from "../components/Layout";
-import {Block, BlockChain, startGenesisBlock} from '../utils/blockchain.ts'
+import BlockDisplay from "../components/block";
+import {Block, BlockChain, startGenesisBlock} from '../utils/blockchain'
 
 
 const Blockchain:FC = () => {
@@ -32,27 +33,17 @@ const Blockchain:FC = () => {
       <button onClick={handleBlockChainStart}>Start the blockchain</button>
       {
         blockChain.length > 0 &&
-        blockChain.map((block:Block)=>
-          <ul>
-            <li>Timestamp: {block.timestamp}</li>
-            <li>Index: {block.index}</li>
-            <li>Message: {block.content.message}</li>
-            <li>Hash: {block.hash}</li>
-            <li>Previous Hash: {block.previousHash}</li>
-          </ul>
+        blockChain.map((block:Block) => {
+          console.log("About to send: ",block)
+            return (<BlockDisplay block={block}/>)
+          }
         )
       }
       <button onClick={handleGetLatestBlock}>See the last Block</button>
       {
         lastBlock !== undefined && lastBlockVisible &&
           <>
-            <ul>
-              <li>Timestamp: {lastBlock.timestamp}</li>
-              <li>Index: {lastBlock.index}</li>
-              <li>Message: {lastBlock.content.message}</li>
-              <li>Hash: {lastBlock.hash}</li>
-              <li>Previous Hash: {lastBlock.previousHash}</li>
-            </ul>
+            <BlockDisplay block={lastBlock}/>
             <button onClick={handleHideLastBlock}>Hide the last Block</button>
           </>
       }
