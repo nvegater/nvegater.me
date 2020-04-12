@@ -45,16 +45,16 @@ const Blockchain:FC = () => {
         <button onClick={handleBlockChainStart}>Start the blockchain</button>
       }
       {
-        morethanOneBlock &&
+        atLeastOneBlock &&
+        <button onClick={handleAddBlock}>Add a new block</button>
+      }
+      {
+        morethanOneBlock && !lastBlockVisible &&
         <button onClick={handleGetLatestBlock}>See the last Block</button>
       }
       {
         lastBlock !== undefined && lastBlockVisible &&
         <button onClick={handleHideLastBlock}>Hide the last Block</button>
-      }
-      {
-        atLeastOneBlock &&
-        <button onClick={handleAddBlock}>Add a new block</button>
       }
       {
         lastBlock !== undefined && lastBlockVisible && <BlockDisplay block={lastBlock}/>
