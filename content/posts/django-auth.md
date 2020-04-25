@@ -1,18 +1,13 @@
 ---
-title: Authentication with Django
-date: '2019-04-12'
+title: Fake Twitter with Django
+date: '2019-04-25'
 published: true
 layout: post
-tags: ['django', 'gatsby', 'python', 'authentication']
+tags: ['django', 'gatsby', 'python', 'faketwitter']
 category: example
 ---
 
 ## Backend
-
-So lets get right to it with a nice soundtrack.
-(I will be adding soundtrack to the next posts, since it improves my memory. God knows I need it)[^soundtrack]
-
-[^soundtrack]: Soundtrack: Words from Neil Young. Vincent from Don McLean. I'll be Around from Yo la tengo. Pancakes from Marvin Pontiac
 
 Firstly lets check the [docs](https://docs.djangoproject.com/en/3.0/intro/install/).
 I want to add Postgresql later, but for now I will stick to the included SQLLite that comes with Django.
@@ -30,7 +25,7 @@ source /usr/local/bin/virtualenvwrapper.sh
 
 I create a Django project following the [tutorial](https://docs.djangoproject.com/en/3.0/intro/tutorial01/):
 ```bash
-$ cd api-auth-django
+$ cd tweetwo
 $ virtualenv venv
 $ source venv/bin/activate
 $ python -m pip install Django
@@ -41,24 +36,30 @@ $ cd authSite && python manage.py runserver 127.0.0.1:8001
 > of a Python package that follows a certain convention.
 > Django generates the basic directory structure of an app.
 
-So I made a so called 'app' (for now making a poll app, later I will add an auth app):
+So I made a so called 'app' (for now making a tweets app).
+First making sure im in an activated virtual environment
 ```bash
-python manage.py startapp polls
+cd tweetwo
+virtualenv venv
+source venv/bin/activate
+python manage.py startapp tweets
+# or
+./manage.py startapp tweets
 ```
 
-The difference between `authSite/urls.py` and `polls/urls.py` was a bit tricky to discover.
+The difference between `tweetwo/urls.py` and `tweets/urls.py` was a bit tricky to discover.
 
-`authSite/` calls `polls/`
+`tweetwo/` calls `tweets/`
 
- `polls/` calls a View.
+ `tweets/` calls a View.
 
 Is not more complicated than that for now.
 Just the way is done is weird:
 
 ```python
-path('polls/', include('polls.urls')) # URL Pattern for Polls `authSite/urls.py`
+path('tweets/', include('tweets.urls')) # URL Pattern in AuthSite calling tweets: `tweetwo/urls.py`
 
-path('', views.index, name='index') # URL Pattern for a View (that has a method called 'index') in `polls/urls.py`
+path('', views.index, name='index') # URL Pattern in tweets calling a View (that has a method called 'index') in `polls/urls.py`
 ```
 
 
@@ -69,17 +70,35 @@ path('', views.index, name='index') # URL Pattern for a View (that has a method 
 > DRY...
 > The goal is to define your data model in one place and automatically derive things from it.
 
+A tweet model will get translated to a database:
+
+```python
+ class Tweet(models.Model):
+     # id = models.AutoField(primary_key=True) generated automatically for all the models.
+     content = models.TextField(blank=True, null=True)  # in case only image is tweeted.
+     image = models.FileField(upload_to='images/')  # save the path to the image
+ ```
+
+Users, validators, contenttypes etc... a lot of things come by default with django.
+Lets go now to the database.
+
 ## Database
 
 ```bash
-python manage.py migrate
+./manage.py makemigrations
+./manage.py migrate
 ```
 > The migrate command creates any necessary database tables
-> (by looking INSTALLED_APPS in authSite/settings.py file).
+> (by looking INSTALLED_APPS in tweetwo/settings.py file).
 
 Migrations come from `models.py` file.
-They are a history
-to synchronize the database schema to match the current models.
+Migrations synchronize the database schema to match the current models.
+ ```python
+class Tweet(models.Model):
+    # id = models.AutoField(primary_key=True)
+    content = models.TextField(blank=True, null=True)  # in case only image is tweeted.
+    image = models.FileField(upload_to='images/')  # save the path to the image
+```
 
 ## Auto generated Admin page
 
