@@ -84,6 +84,8 @@ Lets go now to the database.
 
 ## Database
 
+After making a model, run this two:
+
 ```bash
 ./manage.py makemigrations
 ./manage.py migrate
@@ -93,12 +95,41 @@ Lets go now to the database.
 
 Migrations come from `models.py` file.
 Migrations synchronize the database schema to match the current models.
- ```python
-class Tweet(models.Model):
-    # id = models.AutoField(primary_key=True)
-    content = models.TextField(blank=True, null=True)  # in case only image is tweeted.
-    image = models.FileField(upload_to='images/')  # save the path to the image
+
+## Testing stored data
+
+Looks like python commandline, but is not:
+```python
+cd tweetwo/tweetwo
+./manage.py shell
 ```
+Search for the tweets app, the `models.py` and the Tweet class:
+```python
+>>> from tweets.models import Tweet
+>>> obj = Tweet()
+>>> obj.content = "Hello world"
+>>> obj.save()
+```
+This is now persisted in the database :) to prove that, ill go out of the console
+```python
+>>> exit()
+```
+Go in again
+```python
+./manage.py shell
+```
+Find the object I just persisted
+```python
+>>> from tweets.models import Tweet
+>>> obj = Tweet.objects.get(id=1)
+>>> obj.content
+'Hello world'
+```
+
+Magic. things are being stored now.
+
+
+
 
 ## Auto generated Admin page
 
