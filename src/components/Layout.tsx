@@ -53,6 +53,9 @@ const Layout: FC<LayoutProps> = ({children, title}) => {
           <li>
             <Link to={'/blockchain'}>Blockchain</Link>
           </li>
+          <li>
+            <Link to={'/Chart'}>MDX-Chart</Link>
+          </li>
         </ul>
       </StyledNav>
       <main className="content" role="main">
