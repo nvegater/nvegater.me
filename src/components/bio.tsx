@@ -41,7 +41,7 @@ const Bio: FC = () => {
             {description}
           </h1>
           <p>
-            By Nicolas Vega
+            Nicolás Vega
             <br />
             <a href={social.github}>Github</a>
           </p>
