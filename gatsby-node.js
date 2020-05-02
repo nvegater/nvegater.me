@@ -65,6 +65,9 @@ exports.createPages = ({graphql, actions}) => {
     const tagTemplate = path.resolve('./src/templates/tag.tsx');
     console.log("Path for tag template", tagTemplate);
 
+    const postTachyons = path.resolve('./src/templates/postTachyons.tsx');
+    console.log("Path for tag template", postTachyons);
+
     /*
       Takes all the posts from the
       content/posts/
@@ -88,7 +91,7 @@ exports.createPages = ({graphql, actions}) => {
       * */
       actions.createPage({
         path: markdownPost.node.fields.slug,
-        component: postTemplate,
+        component: markdownPost.node.frontmatter.title === 'Taychons' ? postTachyons : postTemplate,
         context: {
           slug: markdownPost.node.fields.slug,
           previous: previousNode, /*previous and next passed to the context. Each of the context fields
@@ -124,22 +127,22 @@ exports.createPages = ({graphql, actions}) => {
 };
 
 exports.onCreateNode = ({node, actions, getNode}) => { // Slug is a simplified name (directory friendly)
-  // Generate a slug for each created node.
+                                                       // Generate a slug for each created node.
   if (node.internal.type === `MarkdownRemark`) {
     const value = createFilePath({node, getNode});
     actions.createNodeField({
       name: `slug`,
-            node,
-            value,
-        })
-        console.log("value created with createFilePath: ", value);
-    }
+      node,
+      value,
+    })
+    console.log("value created with createFilePath: ", value);
+  }
 };
 
 // Implement the Gatsby API “onCreatePage”. This is
 // called after every page is created.
-exports.onCreatePage = async ({ page, actions }) => {
-  const { createPage } = actions
+exports.onCreatePage = async ({page, actions}) => {
+  const {createPage} = actions
   // Only update the `/app` page.
   if (page.path.match(/^\/account/)) {
     // page.matchPath is a special key that's used for matching pages
@@ -150,8 +153,8 @@ exports.onCreatePage = async ({ page, actions }) => {
   }
 }
 
-exports.onCreateWebpackConfig = ({stage,loader,actions}) => {
-  if (stage === 'build-html'){
+exports.onCreateWebpackConfig = ({stage, loader, actions}) => {
+  if (stage === 'build-html') {
     /* During the build step, "auth0-js" will break because it relies on browser-specific API'S
     * Fortunately we dont need it during the build.
     * Using webpack's null loader, we ignore auth0-js during build.

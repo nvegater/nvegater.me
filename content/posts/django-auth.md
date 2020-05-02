@@ -1,9 +1,9 @@
 ---
-title: Fake Twitter with Django
+title: Django
 date: '2019-04-25'
 published: true
 layout: post
-tags: ['django', 'gatsby', 'python', 'faketwitter']
+tags: ['django', 'gatsby', 'python', 'authentication']
 category: example
 ---
 
