@@ -1,7 +1,7 @@
-import React, {FC} from "react";
-import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
-} from 'recharts';
+import React, {FC, useState} from "react";
+import {CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis,} from 'recharts';
+import LoginForm from "../templates/LoginForm";
+import Button, {ButtonHandle} from "./Button";
 
 const data = [
   {
@@ -27,23 +27,36 @@ const data = [
   },
 ];
 const Chart:FC = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+
   return (
-    <LineChart
-      width={500}
-      height={300}
-      data={data}
-      margin={{
-        top: 5, right: 30, left: 20, bottom: 5,
-      }}
-    >
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="name" />
-      <YAxis />
-      <Tooltip />
-      <Legend />
-      <Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{ r: 8 }} />
-      <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
-    </LineChart>
+    <div>
+      {
+        !isLoggedIn && <div> Sign up or (if you have an account already) log in to see the chart <LoginForm setIsLoggedIn={setIsLoggedIn}/></div>
+      }
+
+      {
+        isLoggedIn && <div>
+          <LineChart
+            width={500}
+            height={300}
+            data={data}
+            margin={{
+              top: 5, right: 30, left: 20, bottom: 5,
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{ r: 8 }} />
+            <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+          </LineChart>
+          <Button name='Log out' buttonHandle={ButtonHandle.logout} setIsLoggedIn={setIsLoggedIn} />
+        </div>
+      }
+    </div>
   );
 }
 
