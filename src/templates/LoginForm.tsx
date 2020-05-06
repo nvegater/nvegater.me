@@ -214,15 +214,14 @@ const LoginForm: FC<LoginProps> = ({setIsLoggedIn}) => {
 
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [userName, setUserName] = useState<string>("");
 
   function handleSubmit(event: any) {
     console.log("Handling Submit with username: ", email, " and password: ", password);
     event.preventDefault();
-
     if (loginOrSignUp === LoginOrSignUp.login) {
       axios.post('http://127.0.0.1:8001/authapp/token/login', {
-        email: email,
-        username: email,
+        username: userName,
         password: password
       }).then((res: any) => {
 
@@ -236,7 +235,7 @@ const LoginForm: FC<LoginProps> = ({setIsLoggedIn}) => {
     } else {
       axios.post('http://127.0.0.1:8001/authapp/users/', {
         email: email,
-        username: email,
+        username: userName,
         password: password
       }).then((res: any) => {
 
@@ -258,11 +257,20 @@ const LoginForm: FC<LoginProps> = ({setIsLoggedIn}) => {
           <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
             <legend className="f4 fw6 ph0 mh0">{messageLoginOrSignUp}</legend>
             <div className="mt3">
-              <label className="db fw6 lh-copy f6" htmlFor="email-address">Email</label>
-              <input className="b pa2 input-reset ba bg-transparent hover-bg-black w-100" type="email"
-                     name="email-address" id="email-address" value={email}
-                     onChange={(event) => setEmail(event.target.value)}/>
+              <label className="db fw6 lh-copy f6" htmlFor="username">Username</label>
+              <input className="b pa2 input-reset ba bg-transparent hover-bg-black w-100" type="username"
+                     name="username" id="username" value={userName}
+                     onChange={(event) => setUserName(event.target.value)}/>
             </div>
+            {
+              loginOrSignUp === LoginOrSignUp.signUp &&
+              <div className="mt3">
+                <label className="db fw6 lh-copy f6" htmlFor="email-address">Email</label>
+                <input className="b pa2 input-reset ba bg-transparent hover-bg-black w-100" type="email"
+                       name="email-address" id="email-address" value={email}
+                       onChange={(event) => setEmail(event.target.value)}/>
+              </div>
+            }
             <div className="mv3">
               <label className="db fw6 lh-copy f6" htmlFor="password">Password</label>
               <input className="b pa2 input-reset ba bg-transparent hover-bg-black w-100"
@@ -276,13 +284,13 @@ const LoginForm: FC<LoginProps> = ({setIsLoggedIn}) => {
           </div>
           <div className="lh-copy mt3">
             <div className="f6 link dim black db"
-               onClick={() => {
-                 if (LoginOrSignUp.signUp === loginOrSignUp) {
-                   setLoginOrSignUp(LoginOrSignUp.login)
-                 } else {
-                   setLoginOrSignUp(LoginOrSignUp.signUp)
-                 }
-               }}>{loginOrSignUp === LoginOrSignUp.login ? 'Sign up' : 'Log in'}</div>
+                 onClick={() => {
+                   if (LoginOrSignUp.signUp === loginOrSignUp) {
+                     setLoginOrSignUp(LoginOrSignUp.login)
+                   } else {
+                     setLoginOrSignUp(LoginOrSignUp.signUp)
+                   }
+                 }}>{loginOrSignUp === LoginOrSignUp.login ? 'Sign up' : 'Log in'}</div>
           </div>
         </form>
       </main>
