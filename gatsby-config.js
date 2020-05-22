@@ -16,6 +16,17 @@ module.exports = {
   },
   plugins: [
     {
+      resolve: "gatsby-source-graphql",
+      options: {
+        // This type will contain remote schema Query type
+        typeName: "django",
+        // This is the field under which it's accessible
+        fieldName: "DJANGO",
+        // URL to query from
+        url: "http://localhost:8001/stocks/graphql/",
+      }
+    },
+    {
       resolve: `gatsby-source-filesystem`,
       options: {
         path: `${__dirname}/content/posts`,
