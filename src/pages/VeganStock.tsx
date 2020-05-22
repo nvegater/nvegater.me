@@ -3,12 +3,14 @@ import {graphql} from "gatsby";
 
 import Layout from "../components/Layout";
 
+interface Country {
+  id: string;
+  countryName: string;
+}
+
 interface PageQueryData {
   DJANGO: {
-      countries: {
-        id: string;
-        countryName: string;
-      }
+      countries: Country[];
     }
 }
 
@@ -35,6 +37,13 @@ const VeganStock: FC<VeganStockProps> = ({data}) => {
 
     <h2>Vegan Stock Webpage</h2>
     <h3>Providers from this countries: </h3>
+    {
+      data.DJANGO.countries.map((country, i)=>
+        <h4 key={i}>
+          {country.countryName}
+        </h4>
+      )
+    }
 
   </Layout>
 }
