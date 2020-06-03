@@ -1,29 +1,5 @@
 const path = require(`path`);
 const {createFilePath} = require(`gatsby-source-filesystem`);
-/*
-*
-* GraphQL is an API that access a datastore- in this case Gatsby itself.
-*
-* gatsby-source-filesystem grabs all the files specified in directories from -config.js
-* and transforms them using gatsby-transforming-remark.
-*
-* this provides a Resource containing the rendered Markdown.
-*
-* Gatsby will first look for a corresponding page created via createPages in this file
-* If it doesn’t find the page there it will next look for a page in
-* src/pages.
-*
-* According to the Gatsby structure docs:
-* "Components under src/pages become pages automatically with paths based on their file name."
-* For example, if a user goes to /about, Gatsby will try to find src/pages/about.tsx.
-*
-* Each page in the src/pages folder should export a default React component.
-* Additionally, it can export a pageQuery constant.
-* The pageQuery constant is a GraphQL query that will be executed prior to rendering the component.
-*
-* The results from the query will be passed into the component as a prop called data.
-*
-*/
 
 const nodesQuery = `
   {
@@ -42,8 +18,6 @@ const nodesQuery = `
     }
   }
 `
-
-
 exports.createPages = ({graphql, actions}) => {
   return graphql(nodesQuery).then(result => {
     if (result.errors) {
@@ -51,65 +25,33 @@ exports.createPages = ({graphql, actions}) => {
     }
     const markdownPosts = result.data.allMarkdownRemark.edges;
 
-    /*
-      This basically turns this: `./src/templates/post.tsx`
-      into this:
-      /Users/admin-p00920345/dev/nvegater.me/src/templates/post.tsx
-      So resolves the '.' into something that fits the computer (or server) where the page is running
-      It depends on the operating system. With windows it gets super tricky. because the paths are different
-    * */
-
-
     const postTemplate = path.resolve(`./src/templates/post.tsx`);
-    console.log("Path for post template", postTemplate);
+    console.log("Folder path where the template for the posts is: ", postTemplate);
     const tagTemplate = path.resolve('./src/templates/tag.tsx');
-    console.log("Path for tag template", tagTemplate);
-
-    const postTachyons = path.resolve('./src/templates/postTachyons.tsx');
-    console.log("Path for tag template", postTachyons);
-
-    /*
-      Takes all the posts from the
-      content/posts/
-      directory:
-
-      /TODOS/
-      /hello-world/
-      /understanding_gatsby/
-      /images/
-      /understanding_mdx/
-
-      */
+    console.log("Folder path where the template for the tags is: ", tagTemplate);
 
     markdownPosts.forEach((markdownPost, index) => {
       const previousNode = index === markdownPosts.length - 1 ? null : markdownPosts[index + 1].node;
       const nextNode = index === 0 ? null : markdownPosts[index - 1].node;
 
-      /*
-     passed a previous and next field (optional) to the context
-     so that we generate a carousel at the bottom of each post.
-      * */
       actions.createPage({
         path: markdownPost.node.fields.slug,
-        component: markdownPost.node.frontmatter.title === 'Taychons' ? postTachyons : postTemplate,
+        component: postTemplate,
         context: {
           slug: markdownPost.node.fields.slug,
-          previous: previousNode, /*previous and next passed to the context. Each of the context fields
-                                Will be transformed to props we can use in react templates.
-                                Previous and next allows us to build a carousel in footer of pages*/
+          previous: previousNode,
           next: nextNode,
         },
       })
     });
 
     // Iterate through each post, putting all found tags into `tags`
-    let tags = [];
-    markdownPosts.forEach(post => {
-      if (post.node.frontmatter.tags) {
-        tags = tags.concat(post.node.frontmatter.tags)
-      }
-    });
-    const uniqueTags = [...new Set(tags)]; //Make Tags unique with Set so that there are no duplicates
+    const tags = markdownPosts
+      .filter(post => post.node.frontmatter.tags === true)
+      .map(post => post.node.frontmatter.tags);
+
+    //Make Tags unique with Set so that there are no duplicates
+    const uniqueTags = [...new Set(tags)];
 
     // Create tag pages
     uniqueTags.forEach(tag => {
