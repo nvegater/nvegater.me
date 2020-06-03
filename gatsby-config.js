@@ -3,7 +3,7 @@
 module.exports = {
   siteMetadata: { // This will be accessed via "graphqlQuery"
     title: 'Nvegater',
-    description: 'Homepage',
+    description: '',
     siteUrl: 'https://nvegater.com',
     author: {
       name: 'Nicolas Vega Terrazas',

@@ -39,25 +39,13 @@ const Layout: FC<LayoutProps> = ({children, title}) => {
       <StyledNav className="navigation">
         <ul>
           <li>
-            <Link to={'/'}>&</Link>
+            <Link to={'/'}>Posts</Link>
           </li>
           <li>
-            <Link to={'/tags'}>Tags</Link>
+            <Link to={'/tags'}>Topics</Link>
           </li>
           <li>
-            <Link to={'/about'}>About</Link>
-          </li>
-          <li>
-            <Link to={'/login'}>Login</Link>
-          </li>
-          <li>
-            <Link to={'/blockchain'}>Blockchain</Link>
-          </li>
-          <li>
-            <Link to={'/Chart'}>MDX-Chart</Link>
-          </li>
-          <li>
-            <Link to={'/VeganStock'}>Vegan Stock</Link>
+            <Link to={'/about'}>Portfolio</Link>
           </li>
         </ul>
       </StyledNav>
