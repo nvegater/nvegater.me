@@ -1,6 +1,6 @@
 ---
 title: Replacing Spring boot backend with Django-Graphql
-date: '2019-05-18'
+date: '2019-06-17'
 published: true
 layout: post
 tags: ['django', 'graphql', 'react', 'postgres']
