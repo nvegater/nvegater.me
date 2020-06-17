@@ -89,11 +89,14 @@ An optimization triggers 5 changes instead of 6 changes with our current approac
 This is not fixing our worst case Scenario. So why bother?
 
 
-|Change      |No. Changes current (max)|No. Changes new (max)|
-|:--------   |:-----------------:|:-------------:|
-| ETL        |6                  | 5             |
-| Feature    |1                  | 0             |
-| New Client |2                  | 0             |
+|Change           |No. potential Changes now (max)|No. Changes new (max)|
+|:--------        |:-----------------------------:|:-------------------:|
+| ETL change      |6                              | 5                   |
+| client change   |2                              | 2                   |
+| backend change  |3                              | 1                   |
+| add new client  |2                              | 1                   |
+| TOTAL:          |13                             | 9                   |
+
 
 
 
