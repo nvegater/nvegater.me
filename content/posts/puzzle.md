@@ -1,5 +1,5 @@
 ---
-title: Devious problems
+title: Why bother making software?
 date: '2019-05-18'
 published: true
 layout: post
@@ -7,13 +7,20 @@ tags: ['django', 'graphql', 'react', 'postgres']
 category: example
 ---
 
-I want to adjust my understanding based on learnings and
+This is a reminder that there are only few people
+that give a shit about doing nice things
+for the "programming" world[^compared].
+I want to be one of those few, since
+I enjoy software development and take it seriously (maybe more than I should).
+
+[^compared]: compared to the many, that sees the programming world as a money making machine.
+
+I want to improve myself, and the software development world. That's why this blog exists.
+To adjust my understanding based on new learnings and
 repeat this as much as my chill perspective on life allows it.
 
-Particularly now I want to observe how I think about problems and
-find out where I am in the process of solving them.
+## What problems are out there for software to fix?
 
-## What problem?
 
 The economy exists, the world is complicated [^Intro], and
 most of us use technology to cope better with life.
@@ -21,19 +28,21 @@ most of us use technology to cope better with life.
 [^Intro]: People start business or works in a business, they want to invest time, effort and work to do something useful, and harvest the results. Statistically a person will harvest the work in form of $Money$. They pay money to work more efficiently and hopefully one day they get this money back plus some earnings. This has been more or less universal for some years I guess.
 
 People mostly have Windows computers and Android phones[^osShares] where they type data,
-share it and try to do something useful with it.
+share it and try to do something useful with it, while other people harvest other people's data to make money
 
 [^osShares]: You dont believe me or you're reading this from the future? check [THIS wiki](https://en.wikipedia.org/wiki/Usage_share_of_operating_systems)
 
 `FinalVERSION_FINAL_FINAL.xslx` files grow exponentially along with the growing businesses.
+
+
 GROWTH is a religion in disguise where
 Bill Gates is the Pope,
 Bezos is Saint Peter,
-Google is Jesuschrist,
+Google is Jesuschrist, data is as much of a currency as money and
 Excel sucks...
 
 But without being so dramatic, there is a lot of binary data everywhere.
-Nowadays this data is practically a currency.
+Nowadays this data is a currency.
 
 But who has time to maintain this annoying computer files anymore?
 The idea behind a business is to provide value and people are busy "Business growing".

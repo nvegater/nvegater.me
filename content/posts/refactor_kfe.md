@@ -1,5 +1,5 @@
 ---
-title: Replacing Spring boot backend with Django-Graphql
+title: Architecture (Graphql vs Rest)
 date: '2019-06-17'
 published: true
 layout: post
@@ -38,9 +38,8 @@ to obtain data from API\_2 and API\_3 endpoints and display it to the user.
 [^back]: The task of the backend, is to build SQL queries using API\_1 Endpoints and transform the response of the queries according to the business logic.
 
 ## Problem
-There are many potential problems.
-ETL optimizations will make changes directly in the DB very often (hopefully)
-and could potentially influence all the elements in the current architecture.
+ETL optimizations will make changes directly in the DB very often.
+This could potentially influence all the elements in the current architecture.
 Therefore, I use optimizations in ETL to illustrate the problem (the worst case). [^worstCase]
 
 [^worstCase]:  Other actions like feature requests, connecting new data sources or bug fixing, could potentially trigger changes in different parts of the system as well. These changes may or may not trigger changes in other parts of the system.
@@ -51,15 +50,13 @@ ETL---> DB--->API_1-(change1)--->API_2-(change2)--->(change3)Client
 (optimization)                       \
                                       -->API_3-(change4)--->(change5)Client
 ```
-For "n" being the number of Web-Clients
-and "y" being the number of changes necessary
-to keep the Web-Clients in Sync with the database:
+
+### Equation 1
+Current changes equation[^formula1]
+
+[^formula1]: For "n" being the number of Web-Clients and "y" being the number of changes necessary to keep the Web-Clients in Sync with the database:
 
 `y = 2n + 1`
-
-Lets say in average (this point is just speculation and can vary)
-a developer can achieve 1 change per day.
-` Analyze-->Prioritize-->develop--->test--->Deploy`
 
 |Clients  |No. of potential changes|
 |:--------|:-----------------------------|
@@ -86,9 +83,9 @@ ETL-->      DB    -->            Backend
                                               ----> (graphql queries) Client2
 ```
 ### New Keypoints
-1. One backend to rule them all (written in Python-Django).
+1. One backend.
 2. The Backend will contain models of the Database Tables.
-3. Instead of multiple endpoints, only one Graphql Schemas per table will be exposed.
+3. Instead of multiple endpoints, only one Graphql Schema per table will be exposed.
 4. Instead of sending requests to endpoints, the clients send queries to the Graphql Schemas.
 
 ## Solving the problem?
@@ -103,17 +100,25 @@ ETL-->              DB    -->    Backend
                                 (change2: Schemas-Models Sync) ----> (change3: Queries) Client1
                                                                ----> (change4: Queries) Client2
 ```
-The new architecture reduce the potential number of changes.
-From the current approach from:
 
-`2n + 1  // where "n" is number of Web-Clients`
+### Equation 2
 
-To just: `n + 2`.
+With the new architecture:[^formula2]
+
+ `n + 2`
+
+[^formula2]: For "n" being the number of Web-Clients.
+
+Against current changes equation[^formula1]
+
+`y = 2n + 1`
+
+
 
 The table showcase the difference a bit clearer:
 
-|Clients  |No. of potential changes (new approach)|No. of potential changes (current approach|
-|:--------|:--------------------------------------|:-----------------------------|
+|Clients  |Potential changes (new)|Potential changes (current)|
+|:--------:|:--------------------------------------:|:-----------------------------:|
 | 1       |3                                      |3                             |
 | 2       |4                                      |5                             |
 | 3       |5                                      |7                             |
@@ -121,21 +126,24 @@ The table showcase the difference a bit clearer:
 | 5       |7                                      |11                            |
 | TOTAL   |25                                     |35                            |
 
-### Side effects
+The improvement is notable.
+
+## Side effects
 
 #### Positive
 * It’s fair to say that GraphQL is a marked improvement over REST in almost every way[^ack].
 * Accelerate development time.
-* Python (do I need to elaborate?).
+* Python.
 * Less Applications, more simple architecture.
-* All DB data available for clients at once. (API's only expose extracted data)
+* All DB data available for clients at once.
 
 [^ack]: Acknowledging REST’s influences, GraphQL design is as an iteration forward. REST has been one of the most influential, foundational building blocks of the modern web, and GraphQL wouldn’t exist without it
 #### Negative
 
 * Relatively early adoption.
 * Learning curves.
-* Backend is not compatible with
+
+
 
 A postgres DB has 3 Schemas
 * CORE
