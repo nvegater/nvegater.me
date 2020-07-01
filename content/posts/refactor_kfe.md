@@ -14,7 +14,7 @@ A dashboard and a search engine.
 The architecture looks roughly like this:
 ```
 Internet Data
-\
+\ (ETL)
  --> Database
       \
        --> Data layer (API_1)
@@ -25,7 +25,7 @@ Internet Data
 ```
 
 ### Technical Keypoints
-1. Data from a variety of sources is loaded and organized in the DB (ETL).
+1. Data from a variety of sources is loaded and organized in the DB (this pipeline is called ETL).
 2. The Data layer exposes endpoints for sending queries to the DB[^querysys].
   API\_1 endpoints:
     * /select/
@@ -50,11 +50,17 @@ Therefore, I use optimizations in ETL to illustrate the problem (the worst case)
 
 [^worstCase]:  Other actions like feature requests, connecting new data sources or bug fixing, could potentially trigger changes in different parts of the system as well. These changes may or may not trigger changes in other parts of the system.
 
-Consider an optimization having a cascade effect of 5 changes:
+Consider an ETL pipeline optimization having a cascade effect of 5 changes:
 ```
-ETL---> DB--->API_1-(change1)--->API_2-(change2)--->(change3)Client
-(optimization)                       \
-                                      -->API_3-(change4)--->(change5)Client
+ETL optimization
+\
+ --> Database (change - not from DEV Team)
+      \
+       --> Data layer (change 1)
+            \
+             \
+              --> Backend (change 2) --> Client (change 3)
+              --> Backend (change 4) --> Client (change 5)
 ```
 
 ### Equation 1
@@ -80,13 +86,15 @@ it can take around week to synchronize the clients after an ETL optimization.
 
 GraphQL new architecture:
 ```
-ETL-->      DB    -->            Backend
-        (DB Tables)       (Models of DB Tables)
-                                \
-                                 \ exposes
-                                  \
-                            (Graphql Schemas) ----> (graphql queries) Client1
-                                              ----> (graphql queries) Client2
+Internet Data
+\ (ETL)
+ --> Database (Tables)
+      \
+       --> Backend (Tables models<->Graphql schemas)
+            \
+             \
+              --> Client 1 (Graphql queries)
+              --> Client 2 (Graphql queries)
 ```
 ### New Keypoints
 1. One backend.
@@ -98,13 +106,17 @@ ETL-->      DB    -->            Backend
 
 With the proposed architecture in place, ETL Optimizations will have a different cascade effect.
 ```
-ETL-->              DB    -->    Backend
-(optimization)                 (change1: Models-DB Sync)
-                                        \
-                                         \ exposes
-                                          \
-                                (change2: Schemas-Models Sync) ----> (change3: Queries) Client1
-                                                               ----> (change4: Queries) Client2
+ETL Optimization
+\
+ --> Database (Tables change)
+      \
+       --> Backend (Tables models<->Graphql schemas)
+            \               change 1
+             \
+              --> Client 1 (Graphql queries)
+                            change 2
+              --> Client 2 (Graphql queries)
+                            change 3
 ```
 
 ### Equation 2
