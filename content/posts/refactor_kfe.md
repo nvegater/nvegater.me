@@ -13,9 +13,15 @@ with 2 Web-Clients.
 A dashboard and a search engine.
 The architecture looks roughly like this:
 ```
-ETL--->DB--(Query)-->DataLayer-(API_1)-->BackPP-(API_2)-->Client
-                                    \
-                                     -->BackLDB-(API_3)-->Client
+Internet Data
+\
+ --> Database
+      \
+       --> Data layer (API_1)
+            \
+             \
+              --> Backend (API_2) --> Client (1)
+              --> Backend (API_3) --> Client (2)
 ```
 
 ### Technical Keypoints
