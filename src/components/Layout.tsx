@@ -28,24 +28,17 @@ interface LayoutProps {
   children: ReactNode;
 }
 
-const Layout: FC<LayoutProps> = ({children, title}) => {
-  console.log(title);
+const Layout: FC<LayoutProps> = ({children}) => {
   return (
     <>
       <GlobalStyle/>
-      {/*inject Global Style this inside the layout (not in the <head>)
-        so that changes to the style
-        will trigger a re-render when using hot-module-reloading.*/}
       <StyledNav className="navigation">
         <ul>
           <li>
-            <Link to={'/'}>&</Link>
+            <Link to={'/'}>Posts</Link>
           </li>
           <li>
             <Link to={'/tags'}>Tags</Link>
-          </li>
-          <li>
-            <Link to={'/blockchain'}>Blockchain</Link>
           </li>
           <li>
             <Link to={'/Chart'}>MDX-Chart</Link>

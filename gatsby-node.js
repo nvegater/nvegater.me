@@ -1,6 +1,9 @@
 const path = require(`path`);
 const {createFilePath} = require(`gatsby-source-filesystem`);
 
+// This query retrieves all the markdown files
+// from the content/posts/ folder
+// Sorts them "newer first"
 const nodesQuery = `
   {
     allMarkdownRemark(sort: {fields: [frontmatter___date], order: DESC}, limit: 1000) {
@@ -18,6 +21,9 @@ const nodesQuery = `
     }
   }
 `
+
+// inject:
+// MD posts from /content/posts ----> in the post.tsx template.
 exports.createPages = ({graphql, actions}) => {
   return graphql(nodesQuery).then(result => {
     if (result.errors) {
@@ -25,32 +31,32 @@ exports.createPages = ({graphql, actions}) => {
     }
     const markdownPosts = result.data.allMarkdownRemark.edges;
 
-    const postTemplate = path.resolve(`./src/templates/post.tsx`);
-    console.log("Folder path where the template for the posts is: ", postTemplate);
-    const tagTemplate = path.resolve('./src/templates/tag.tsx');
-    console.log("Folder path where the template for the tags is: ", tagTemplate);
+    markdownPosts.forEach((currentPost, index) => {
+      const isLastPost = index === markdownPosts.length - 1; // no need of previous post
+      const previousPost = isLastPost ? null : markdownPosts[index + 1].node;
 
-    markdownPosts.forEach((markdownPost, index) => {
-      const previousNode = index === markdownPosts.length - 1 ? null : markdownPosts[index + 1].node;
-      const nextNode = index === 0 ? null : markdownPosts[index - 1].node;
+      const isNewestPost = index === 0; // no need of "next post"
+      const nextPost = isNewestPost ? null : markdownPosts[index - 1].node;
+
+      const nameOfPage = currentPost.node.fields.slug;
 
       actions.createPage({
-        path: markdownPost.node.fields.slug,
-        component: postTemplate,
+        path: nameOfPage,
+        component: path.resolve(`./src/templates/post.tsx`), // inject post in this component
         context: {
-          slug: markdownPost.node.fields.slug,
-          previous: previousNode,
-          next: nextNode,
+          slug: nameOfPage,
+          previous: previousPost,
+          next: nextPost,
         },
       })
     });
 
-    // Iterate through each post, putting all found tags into `tags`
+    // Get tags, if available
     const tags = markdownPosts
       .filter(post => post.node.frontmatter.tags === true)
       .map(post => post.node.frontmatter.tags);
 
-    //Make Tags unique with Set so that there are no duplicates
+    // Remove duplicatedTags
     const uniqueTags = [...new Set(tags)];
 
     // Create tag pages
@@ -58,9 +64,9 @@ exports.createPages = ({graphql, actions}) => {
       if (!tag) return;
       actions.createPage({
         path: `/tags/${tag}/`,
-        component: tagTemplate,
+        component: path.resolve('./src/templates/tag.tsx'),
         context: {
-          tag,
+          tag, // context can pass anything to tag.tsx
         },
       })
     })
@@ -77,20 +83,5 @@ exports.onCreateNode = ({node, actions, getNode}) => { // Slug is a simplified n
       node,
       value,
     })
-    console.log("value created with createFilePath: ", value);
   }
 };
-
-// Implement the Gatsby API “onCreatePage”. This is
-// called after every page is created.
-exports.onCreatePage = async ({page, actions}) => {
-  const {createPage} = actions
-  // Only update the `/app` page.
-  if (page.path.match(/^\/account/)) {
-    // page.matchPath is a special key that's used for matching pages
-    // with corresponding routes only on the client.
-    page.matchPath = "/account/*"
-    // Update the page.
-    createPage(page)
-  }
-}
