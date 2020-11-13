@@ -66,8 +66,8 @@ const Index:FC <Props> = ({data})=>{
   return (
     <Layout title={siteTitle}>
       <Head
-        title={"All posts"}
-        keywords={['blog', 'gatsby', 'markdown', 'react']}
+        title={"Posts"}
+        keywords={['graphql', 'typescript', 'learn', 'react']}
       />
       <Bio/>
       <article>
@@ -81,7 +81,6 @@ const Index:FC <Props> = ({data})=>{
                       <Link to={node.fields.slug}>{title}</Link>
                     </h3>
                     <small>{node.frontmatter.date}</small>
-                    <p dangerouslySetInnerHTML={{__html: node.excerpt}} />
                   </div>
                 );
               }

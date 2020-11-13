@@ -1,13 +1,13 @@
 ---
-title: Django
+title: Python, the Django framework.
 date: '2019-04-25'
 published: true
 layout: post
-tags: ['django', 'gatsby', 'python', 'authentication']
+tags: ['django', 'python', 'backend']
 category: example
 ---
 
-## Backend
+## Playing with Django
 
 Firstly lets check the [docs](https://docs.djangoproject.com/en/3.0/intro/install/).
 I want to add Postgresql later, but for now I will stick to the included SQLLite that comes with Django.
@@ -25,41 +25,39 @@ source /usr/local/bin/virtualenvwrapper.sh
 
 I create a Django project following the [tutorial](https://docs.djangoproject.com/en/3.0/intro/tutorial01/):
 ```bash
-$ cd tweetwo
+$ cd django-backend
 $ virtualenv venv
 $ source venv/bin/activate
 $ python -m pip install Django
-$ django-admin startproject authSite
-$ cd authSite && python manage.py runserver 127.0.0.1:8001
+$ django-admin startproject djangoProject
+$ cd djangoProject && python manage.py runserver 127.0.0.1:8001
 ```
 > An app written in Django consists
 > of a Python package that follows a certain convention.
 > Django generates the basic directory structure of an app.
 
-So I made a so called 'app' (for now making a tweets app).
-First making sure im in an activated virtual environment
+I made a so called 'app'.
+First making sure im inside of an activated virtual environment.
 ```bash
-cd tweetwo
+cd django-backend
 virtualenv venv
 source venv/bin/activate
-python manage.py startapp tweets
+python manage.py startapp djangoApp
 # or
-./manage.py startapp tweets
+./manage.py startapp djangoApp
 ```
 
-The difference between `tweetwo/urls.py` and `tweets/urls.py` was a bit tricky to discover.
+The Django generated folder structures from Projects and Apps are similar.
+But the differences are important, for example between `djangoProject/urls.py` and `djangoApp/urls.py`.
 
-`tweetwo/` calls `tweets/`
-
- `tweets/` calls a View.
-
-Is not more complicated than that for now.
-Just the way is done is weird:
-
+`myDjangoProject/` urls , call apps like `djangoApp/`.
 ```python
-path('tweets/', include('tweets.urls')) # URL Pattern in AuthSite calling tweets: `tweetwo/urls.py`
+path('djangoApp/', include('djangoApp.urls')) # URL Pattern in djangoProject calling djangoApp
+```
 
-path('', views.index, name='index') # URL Pattern in tweets calling a View (that has a method called 'index') in `polls/urls.py`
+ Apps like `djangoApp/` have urls as well, but they call Views.
+```python
+path('', views.index, name='index') # URL Pattern in djangoApp calling a View
 ```
 
 
@@ -70,7 +68,7 @@ path('', views.index, name='index') # URL Pattern in tweets calling a View (that
 > DRY...
 > The goal is to define your data model in one place and automatically derive things from it.
 
-A tweet model will get translated to a database:
+A (e.g.) Tweet model will get translated to a database:
 
 ```python
  class Tweet(models.Model):
@@ -79,8 +77,7 @@ A tweet model will get translated to a database:
      image = models.FileField(upload_to='images/')  # save the path to the image
  ```
 
-Users, validators, contenttypes etc... a lot of things come by default with django.
-Lets go now to the database.
+Users, validators, contentTypes... a lot of things come by default with django.
 
 ## Database
 

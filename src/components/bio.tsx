@@ -1,8 +1,7 @@
 import React, {FC} from "react";
-import {StaticQuery, graphql} from 'gatsby'
+import {graphql, useStaticQuery} from 'gatsby'
 
-// TODO move query to graphQL file, configure top level schema. https://github.com/jimkyndemeyer/graphql-config-examples/tree/master/remote-schema-introspection
-type StaticQueryData = {
+type SiteDetails = {
   site: {
     siteMetadata: {
       description: string
@@ -12,10 +11,8 @@ type StaticQueryData = {
     }
   }
 }
-// this query access siteMetadata in gatsby-config.js.
-// pageQuery is executed always before the component is being rendered
-// TODO rename?
-const graphQLquery = graphql`
+
+const siteDetails = graphql`
   query {
     site {
       siteMetadata {
@@ -29,26 +26,17 @@ const graphQLquery = graphql`
 `;
 
 const Bio: FC = () => {
-  return (
-    <StaticQuery
-      query={graphQLquery}
-      render={
-        (data:StaticQueryData) => {
-        const {description, social} = data.site.siteMetadata;
-        return (
-        <div>
-          <h2>
-            {description}
-            Nicolás Vega Terrazas
-          </h2>
-          <p>
-            <a href={social.github}>Github</a>
-          </p>
-        </div>)
-      }}
-
-    />
-  );
+  const queryResult:SiteDetails = useStaticQuery(siteDetails);
+  const {description, social} = queryResult.site.siteMetadata;
+  return <div>
+    <h2>
+      {description}
+      Nicolás Vega Terrazas
+    </h2>
+    <p>
+      <a href={social.github}>Github</a>
+    </p>
+  </div>
 };
 
 export default Bio;

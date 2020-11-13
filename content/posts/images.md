@@ -1,9 +1,9 @@
 ---
-title: Images
+title: Images, manipulation with Gatsby
 date: '2019-03-28'
 published: true
 layout: post
-tags: ['css', 'style', 'theme']
+tags: ['gatsby', 'images']
 category: example
 featuredImage: ../assets/nhippdezember.jpg
 ---

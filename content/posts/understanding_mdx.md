@@ -1,6 +1,6 @@
 ---
-title: MDX
-date: '2019-03-11'
+title: MDX, React components in Markdown files
+date: '2019-03-12'
 published: true
 layout: post
 tags: ['information', 'MDX']

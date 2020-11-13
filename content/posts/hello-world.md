@@ -7,24 +7,19 @@ tags: ['information', 'gatsby', 'graphql']
 category: example
 ---
 
-Welcome to my site!
-
 ```js
 console.log(`Hello world, 2 + 2 = 5 or ${2 + 2}`);
 ```
 
-This file is in [github](https://github.com/nvegater/nvegater.me)
-and also (in the future) compiled [here](https://nvegater.com).
+Find the code for this site in [github](https://github.com/nvegater/nvegater.me)
 
 The main purposes are:
 
-* Learn Graphql, Gatsby and MDX.
-* Improve React skills.
-* Create a portfolio + blog
-* Improve learning process.
-* Learn how to build interactive Visualisations as in this
-[awesome article](http://worrydream.com/#!2/LadderOfAbstraction)
+* Learn to do fullstack development.
+* Create a portfolio + blog.
 
+Inspired by this:
+[awesome article](http://worrydream.com/#!2/LadderOfAbstraction)
 
 
 Also, my cousin made this logo that I use for testing:

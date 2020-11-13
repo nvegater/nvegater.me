@@ -1,9 +1,9 @@
 ---
-title: Gatsby
+title: Gatsby, static pages with Graphql.
 date: '2019-03-29'
 published: true
 layout: post
-tags: ['information', 'gatsby']
+tags: ['graphql', 'gatsby', frontend]
 category: example
 ---
 
@@ -128,7 +128,7 @@ to create a `<ReactComponents />.tsx` in `src/pages` folder.
 Gatsy can do this differently, they called this
 "creating pages programatically from data".
 
-### End
+to be continued...
 
 
 [more Details](https://www.gatsbyjs.org/tutorial/part-seven/)

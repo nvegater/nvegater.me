@@ -110,7 +110,7 @@ const PostTemplate:FC<Props> = ({data,pageContext})=>{
             fixedImage !== undefined &&
             <Img fixed={fixedImage}/>
           }*/}
-          <div dangerouslySetInnerHTML={{__html: post.html}} />
+          <article dangerouslySetInnerHTML={{__html: post.html}} />
           {/*https://stackoverflow.com/questions/7381974/which-characters-need-to-be-escaped-in-html*/}
           {/*https://zhenyong.github.io/react/tips/dangerously-set-inner-html.html*/}
           {/* content we are injecting was already properly escaped (by the gatsby-remark plugin) */}
