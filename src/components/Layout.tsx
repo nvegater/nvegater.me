@@ -41,7 +41,7 @@ const Layout: FC<LayoutProps> = ({children}) => {
             <Link to={'/tags'}>Tags</Link>
           </li>
           <li>
-            <Link to={'/Chart'}>MDX-Chart</Link>
+            <Link to={'/Chart'}>React in md files</Link>
           </li>
         </ul>
       </StyledNav>
