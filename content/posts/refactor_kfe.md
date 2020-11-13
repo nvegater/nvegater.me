@@ -32,6 +32,11 @@ Internet Data
     * /aggregate/
     * /search/
     * ...
+
+
+[^querysys]: The endpoints offer functions, and the parameters of this functions are packed in SQL statements (selects, joins, etc...). The users of the endpoints of API\_1 can build SQL Statements without worrying about DB connections. This is a layer to separate business logic, from data-source specific logic.
+
+
 3. After querying and post-processing[^back], the DB Data is exposed in API\_2 and API\_3 endpoints:
     * /countries/
     * /quickfact/environment/
@@ -40,7 +45,6 @@ Internet Data
 4. Clients use fixed request templates
 to obtain data from API\_2 and API\_3 endpoints and display it to the user.
 
-[^querysys]: The endpoints offer functions, and the parameters of this functions are packed in SQL statements (selects, joins, etc...). The users of the endpoints of API\_1 can build SQL Statements without worrying about DB connections. This is a layer to separate business logic, from data-source specific logic.
 [^back]: The task of the backend, is to build SQL queries using API\_1 Endpoints and transform the response of the queries according to the business logic.
 
 ## Problem
