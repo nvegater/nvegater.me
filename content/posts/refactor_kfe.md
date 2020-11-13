@@ -161,22 +161,3 @@ The improvement is notable.
 * Relatively early adoption.
 * Learning curves.
 
-
-
-A postgres DB has 3 Schemas
-* CORE
-    * CORE.TB012\_ST\_INDICATOR\_VALUE
-    * CORE.TB013\_ST\_INDICATOR
-* RECT
-	* RECT.ACLED\_EVENTS
-	* RECT.BBC\_NEWS
-* \_SYS\_BIC
-    * \_SYS\_BIC.aa.kfe.cp.ldb.dm2/CV\_DM2\_AVG\_GLOBAL
-    * \_SYS\_BIC.aa.kfe.cp.ldb.dm2/CV\_DM2\_AVG\_REGION
-    * \_SYS\_BIC.aa.kfe.cp.ldb.dm2/CV\_DM2\_COUNTRIES
-    * \_SYS\_BIC.aa.kfe.cp.ldb.dm2/CV\_DM2\_GTD\_OVERVIEW
-    * \_SYS\_BIC.aa.kfe.cp.ldb.dm2/CV\_DM2\_LATEST\_VALUES
-    * \_SYS\_BIC.aa.kfe.cp.ldb.dm2/CV\_DM2\_POPULATION
-    * \_SYS\_BIC.aa.kfe.cp.ldb.dm2/SCV\_DM2\_AVG\_ENVIRONMENT
-    * \_SYS\_BIC.aa.kfe.cp.ldb.dm2/SCV\_DM2\_SOURCES
-
