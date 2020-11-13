@@ -3,7 +3,8 @@
   "scripts": {
     "build": "gatsby build",
     "deploy": "gatsby build --prefix-paths",
-    "dev": "gatsby develop"
+    "dev": "gatsby develop",
+    "heroku-postbuild": "gatsby build"
   },
   "license": "ISC",
   "dependencies": {
