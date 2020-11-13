@@ -37,12 +37,11 @@ const Bio: FC = () => {
         const {description, social} = data.site.siteMetadata;
         return (
         <div>
-          <h1>
+          <h2>
             {description}
-          </h1>
+            Nicolás Vega Terrazas
+          </h2>
           <p>
-            Nicolás Vega
-            <br />
             <a href={social.github}>Github</a>
           </p>
         </div>)
