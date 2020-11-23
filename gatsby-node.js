@@ -52,14 +52,18 @@ exports.createPages = ({graphql, actions}) => {
     });
 
     // Get tags, if available
-    const tags = markdownPosts
-      .filter(post => post.node.frontmatter.tags === true)
-      .map(post => post.node.frontmatter.tags);
+    let tags = []
+    markdownPosts.forEach(post => {
+      if (post.node.frontmatter.tags) {
+        tags = tags.concat(post.node.frontmatter.tags)
+      }
+    })
 
     // Remove duplicatedTags
     const uniqueTags = [...new Set(tags)];
 
     // Create tag pages
+    console.log("Unique tags, really?",uniqueTags)
     uniqueTags.forEach(tag => {
       if (!tag) return;
       actions.createPage({

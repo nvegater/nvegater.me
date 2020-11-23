@@ -62,6 +62,8 @@ const TagTemplate:FC<Props> = ({data,pageContext})=>{
   const {tag} = pageContext;
   const posts = data.allMarkdownRemark.edges;
 
+  console.log(tag)
+
   return(
     <Layout title={siteTitle}>
       <Head
@@ -70,7 +72,7 @@ const TagTemplate:FC<Props> = ({data,pageContext})=>{
       />
       <article>
         <header>
-          <h1>Posts tagged {tag}</h1>
+          <h1>Posts tagged: {tag}</h1>
         </header>
         <div className={`page-content`}>
           {
@@ -82,7 +84,6 @@ const TagTemplate:FC<Props> = ({data,pageContext})=>{
                       <Link to={node.fields.slug}>{title}</Link>
                     </h3>
                     <small>{node.frontmatter.date}</small>
-                    <p dangerouslySetInnerHTML={{__html: node.excerpt}} />
                   </div>
                 );
               }
