@@ -63,7 +63,6 @@ exports.createPages = ({graphql, actions}) => {
     const uniqueTags = [...new Set(tags)];
 
     // Create tag pages
-    console.log("Unique tags, really?",uniqueTags)
     uniqueTags.forEach(tag => {
       if (!tag) return;
       actions.createPage({
