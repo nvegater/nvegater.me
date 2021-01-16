@@ -1,5 +1,9 @@
 ---
-title: Cetys workshop day 1 date: '2021-01-15' published: true layout: post tags: ['node', 'react', 'typescript']
+title: Cetys workshop day 1
+date: '2021-01-15'
+published: true
+layout: post
+tags: ['tutorials', 'cetys']
 category: example
 ---
 
