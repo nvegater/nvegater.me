@@ -163,10 +163,8 @@ yarn add -D nodemon
     "watch": "tsc -w",
     "start-prod": "node dist/index.js",
     "start-dev": "ts-node src/index.ts",
-    "start-prod-hot": "nodemon dist/index.js",
-    // escucha y recompila de TS a JS despues de cada cambio en dist/
-    "start-dev-hot": "nodemon src/index.ts"
-    // corre el servidor y reinicialo despues de cada cambio.
+    "start-prod-hot": "nodemon dist/index.js", // escucha y recompila de TS a JS despues de cada cambio
+    "start-dev-hot": "nodemon src/index.ts"// corre el servidor y reinicialo despues de cada cambio.
   }
 }
 ```
