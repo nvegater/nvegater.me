@@ -5,7 +5,6 @@ published: true
 layout: post
 tags: ['tutorials', 'cetys']
 category: example
-featuredImage: ../assets/ben-awad.png
 ---
 
 ## Fullstack React Graphql Typescript Workshop
