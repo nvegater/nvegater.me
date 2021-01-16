@@ -41,7 +41,7 @@ Es como SQL (DB) pero para comunicar Client y Server.
 
 Consume Graphql APIs
 
-### graphql-codegen
+#### graphql-codegen
 
 Genera automaticamente Interfaces de Typescript con base en Graphql Schemas
 
