@@ -1,5 +1,5 @@
 ---
-title: Cetys workshop day 1
+title: Cetys workshop
 date: '2021-01-15'
 published: true
 layout: post
