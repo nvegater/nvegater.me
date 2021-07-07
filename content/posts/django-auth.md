@@ -126,7 +126,3 @@ Find the object I just persisted
 Magic. things are being stored now.
 
 
-
-
-## Auto generated Admin page
-

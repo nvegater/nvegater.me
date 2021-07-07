@@ -9,10 +9,7 @@ category: example
 
 ## Why?
 
-While you're sleeping or enjoying a landing page, Gatsby pre-fetches resources under the hood.
-
-Gatsby is "secretely cooking" content in advance without your consent.
-Since the content is pre-cooked, it gets delivered faster, making the website feel more responsive.
+Gatsby is "pre-cooking" content in advance to deliver static html faster, making the website feel more responsive.
 
 > Gatsby.js is a static PWA (Progressive Web App) generator.
 > It pulls only the critical HTML, CSS, data, and JavaScript
@@ -20,15 +17,9 @@ Since the content is pre-cooked, it gets delivered faster, making the website fe
 
 > -said by [this guys](https://snipcart.com/blog/choose-best-static-site-generator)
 
-Potentially it means frontend without databases and servers.
-Gatsby builds the whole site as static files,
-including dynamic content.
-
 ## Other advantages I like
 
-
-* Git for website content changes.
-* MDX (.. oh boy [mdx](/understanding_mdx/) )
+* Easy MDX (.. oh boy [mdx](/understanding_mdx/) )
 * Instead of server side and database operations, delegation to Gatsby and GraphQL
 
 ## Understanding Gatsby
@@ -53,9 +44,6 @@ These 2 methods are returned to Gatsby [as the result of a require call:](https:
 exports.createPages = ({graphql, actions}) => {....}
 exports.onCreateNode = ({node, actions, getNode}) => { ...}
 ```
-
-First of all is important to clarify what nodes and pages are.
-
 
 ### Nodes
 
@@ -117,8 +105,6 @@ const posts = result.data.allMarkdownRemark.edges;
 
 Called by Gatsby everytime a new node is created.
 
-
-
 ### `createPages()`
 
 The usual approach to add stuff to a website with react would be
@@ -127,9 +113,6 @@ to create a `<ReactComponents />.tsx` in `src/pages` folder.
 
 Gatsy can do this differently, they called this
 "creating pages programatically from data".
-
-to be continued...
-
 
 [more Details](https://www.gatsbyjs.org/tutorial/part-seven/)
 
