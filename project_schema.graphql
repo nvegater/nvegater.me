@@ -272,7 +272,7 @@ type FileGroupConnection {
 
 type ImageSharp implements Node {
   children: [Node!]!
-  fixed(background: String = "rgba(0,0,0,1)", base64Width: Int, cropFocus: ImageCropFocus = ATTENTION, duotone: DuotoneGradient, fit: ImageFit = COVER, grayscale: Boolean = false, height: Int, jpegProgressive: Boolean = true, jpegQuality: Int, pngCompressionSpeed: Int = 4, pngQuality: Int, quality: Int, rotate: Int = 0, toFormat: ImageFormat = NO_CHANGE, toFormatBase64: ImageFormat = NO_CHANGE, traceSVG: Potrace, trim: Float = 0.0, webpQuality: Int, width: Int): ImageSharpFixed
+  fixed(background: String = "rgba(0,0,0,1)", base64Width: Int, cropFocus: ImageCropFocus = ATTENTION, duotone: DuotoneGradient, fit: ImageFit = COVER, grayscale: Boolean = false, height: Int, jpegProgressive: Boolean = true, jpegQuality: Int, pngCompressionSpeed: Int = 4, pngQuality: Int, quality: Int, rotate: Int = 0, toFormat: ImageFormat = AUTO, toFormatBase64: ImageFormat = AUTO, traceSVG: Potrace, trim: Float = 0.0, webpQuality: Int, width: Int): ImageSharpFixed
   fluid(
     background: String = "rgba(0,0,0,1)",
     base64Width: Int,
@@ -291,18 +291,97 @@ type ImageSharp implements Node {
     sizes: String = "",
     "A list of image widths to be generated. Example: [ 200, 340, 520, 890 ]"
     srcSetBreakpoints: [Int] = [],
-    toFormat: ImageFormat = NO_CHANGE,
-    toFormatBase64: ImageFormat = NO_CHANGE,
+    toFormat: ImageFormat = AUTO,
+    toFormatBase64: ImageFormat = AUTO,
     traceSVG: Potrace,
     trim: Float = 0.0,
     webpQuality: Int
   ): ImageSharpFluid
+  gatsbyImageData(
+    "Background color applied to the wrapper. Also passed to sharp to use as a background when \"letterboxing\" an image to another aspect ratio."
+    background: String = "rgba(0,0,0,0)",
+    "Options for the low-resolution placeholder image. Set placeholder to \"BLURRED\" to use this"
+    blurredOptions: BlurredOptions,
+    """
+
+    The image formats to generate. Valid values are "AUTO" (meaning the same format as the source image), "JPG", "PNG" and "WEBP".
+    The default value is [AUTO, WEBP], and you should rarely need to change this. Take care if you specify JPG or PNG when you do
+    not know the formats of the source images, as this could lead to unwanted results such as converting JPEGs to PNGs. Specifying
+    both PNG and JPG is not supported and will be ignored.
+    """
+    formats: [ImageFormat] = [WEBP],
+    "If set, the height of the generated image. If omitted, it is calculated from the supplied width, matching the aspect ratio of the source image."
+    height: Int,
+    "Options to pass to sharp when generating JPG images."
+    jpgOptions: JPGOptions,
+    """
+
+    The layout for the image.
+    FIXED: A static image sized, that does not resize according to the screen width
+    FLUID: The image resizes to fit its container. Pass a "sizes" option if it isn't going to be the full width of the screen.
+    CONSTRAINED: Resizes to fit its container, up to a maximum width, at which point it will remain fixed in size.
+    """
+    layout: ImageLayout = FIXED,
+    """
+
+    If set, the generated image is a maximum of this height, cropping if necessary.
+    If the image layout is "constrained" then the image will be limited to this height.
+    If the aspect ratio of the image is different than the source, then the image will be cropped.
+    """
+    maxHeight: Int,
+    """
+
+    Maximum display width of generated files.
+    The actual largest image resolution will be this value multipled by the largest value in outputPixelDensities
+    This only applies when layout = FLUID or CONSTRAINED. For other layout types, use "width"
+    """
+    maxWidth: Int,
+    """
+
+    A list of image pixel densities to generate. It will never generate images larger than the source, and will always include a 1x image.
+    Default is [ 1, 2 ] for fixed images, meaning 1x, 2x, 3x, and [0.25, 0.5, 1, 2] for fluid. In this case, an image with a fluid layout and width = 400 would generate images at 100, 200, 400 and 800px wide
+    """
+    outputPixelDensities: [Float],
+    """
+
+    Format of generated placeholder image, displayed while the main image loads.
+    BLURRED: a blurred, low resolution image, encoded as a base64 data URI (default)
+    DOMINANT_COLOR: a solid color, calculated from the dominant color of the image.
+    TRACED_SVG: a low-resolution traced SVG of the image.
+    NONE: no placeholder. Set "background" to use a fixed background color.
+    """
+    placeholder: ImagePlaceholder = BLURRED,
+    "Options to pass to sharp when generating PNG images."
+    pngOptions: PNGOptions,
+    "The default quality. This is overriden by any format-specific options"
+    quality: Int,
+    """
+
+    The "sizes" property, passed to the img tag. This describes the display size of the image.
+    This does not affect the generated images, but is used by the browser to decide which images to download. You can leave this blank for fixed images, or if the responsive image
+    container will be the full width of the screen. In these cases we will generate an appropriate value.
+    """
+    sizes: String = "",
+    "Options for traced placeholder SVGs. You also should set placeholder to \"SVG\"."
+    tracedSVGOptions: Potrace,
+    "Options to pass to sharp to control cropping and other image manipulations."
+    transformOptions: TransformOptions,
+    "Options to pass to sharp when generating WebP images."
+    webpOptions: WebPOptions,
+    """
+
+    The display width of the generated image.
+    The actual largest image resolution will be this value multipled by the largest value in outputPixelDensities
+    Ignored if layout = FLUID or CONSTRAINED, where you should use "maxWidth" instead.
+    """
+    width: Int
+  ): JSON!
   id: ID!
   internal: Internal!
   original: ImageSharpOriginal
   parent: Node
-  resize(background: String = "rgba(0,0,0,1)", base64: Boolean = false, cropFocus: ImageCropFocus = ATTENTION, duotone: DuotoneGradient, fit: ImageFit = COVER, grayscale: Boolean = false, height: Int, jpegProgressive: Boolean = true, jpegQuality: Int, pngCompressionLevel: Int = 9, pngCompressionSpeed: Int = 4, pngQuality: Int, quality: Int, rotate: Int = 0, toFormat: ImageFormat = NO_CHANGE, traceSVG: Potrace, trim: Float = 0.0, webpQuality: Int, width: Int): ImageSharpResize
-  resolutions(background: String = "rgba(0,0,0,1)", base64Width: Int, cropFocus: ImageCropFocus = ATTENTION, duotone: DuotoneGradient, fit: ImageFit = COVER, grayscale: Boolean = false, height: Int, jpegProgressive: Boolean = true, jpegQuality: Int, pngCompressionSpeed: Int = 4, pngQuality: Int, quality: Int, rotate: Int = 0, toFormat: ImageFormat = NO_CHANGE, toFormatBase64: ImageFormat = NO_CHANGE, traceSVG: Potrace, trim: Float = 0.0, webpQuality: Int, width: Int): ImageSharpResolutions @deprecated(reason : "Resolutions was deprecated in Gatsby v2. It's been renamed to \"fixed\" https://example.com/write-docs-and-fix-this-example-link")
+  resize(background: String = "rgba(0,0,0,1)", base64: Boolean = false, cropFocus: ImageCropFocus = ATTENTION, duotone: DuotoneGradient, fit: ImageFit = COVER, grayscale: Boolean = false, height: Int, jpegProgressive: Boolean = true, jpegQuality: Int, pngCompressionLevel: Int = 9, pngCompressionSpeed: Int = 4, pngQuality: Int, quality: Int, rotate: Int = 0, toFormat: ImageFormat = AUTO, traceSVG: Potrace, trim: Float = 0.0, webpQuality: Int, width: Int): ImageSharpResize
+  resolutions(background: String = "rgba(0,0,0,1)", base64Width: Int, cropFocus: ImageCropFocus = ATTENTION, duotone: DuotoneGradient, fit: ImageFit = COVER, grayscale: Boolean = false, height: Int, jpegProgressive: Boolean = true, jpegQuality: Int, pngCompressionSpeed: Int = 4, pngQuality: Int, quality: Int, rotate: Int = 0, toFormat: ImageFormat = AUTO, toFormatBase64: ImageFormat = AUTO, traceSVG: Potrace, trim: Float = 0.0, webpQuality: Int, width: Int): ImageSharpResolutions @deprecated(reason : "Resolutions was deprecated in Gatsby v2. It's been renamed to \"fixed\" https://example.com/write-docs-and-fix-this-example-link")
   sizes(
     background: String = "rgba(0,0,0,1)",
     base64Width: Int,
@@ -321,8 +400,8 @@ type ImageSharp implements Node {
     sizes: String = "",
     "A list of image widths to be generated. Example: [ 200, 340, 520, 890 ]"
     srcSetBreakpoints: [Int] = [],
-    toFormat: ImageFormat = NO_CHANGE,
-    toFormatBase64: ImageFormat = NO_CHANGE,
+    toFormat: ImageFormat = AUTO,
+    toFormatBase64: ImageFormat = AUTO,
     traceSVG: Potrace,
     trim: Float = 0.0,
     webpQuality: Int
@@ -362,8 +441,8 @@ type ImageSharpFluid {
   base64: String
   originalImg: String
   originalName: String
-  presentationHeight: Int
-  presentationWidth: Int
+  presentationHeight: Int!
+  presentationWidth: Int!
   sizes: String!
   src: String!
   srcSet: String!
@@ -414,8 +493,8 @@ type ImageSharpSizes {
   base64: String
   originalImg: String
   originalName: String
-  presentationHeight: Int
-  presentationWidth: Int
+  presentationHeight: Int!
+  presentationWidth: Int!
   sizes: String!
   src: String!
   srcSet: String!
@@ -437,6 +516,7 @@ type Internal {
 
 type MarkdownHeading {
   depth: Int
+  id: String
   value: String
 }
 
@@ -525,6 +605,7 @@ type Mdx implements Node {
   mdxAST: JSON
   parent: Node
   rawBody: String!
+  slug: String
   tableOfContents(maxDepth: Int): JSON
   timeToRead: Int
   wordCount: MdxWordCount
@@ -591,9 +672,9 @@ type Query {
   allSitePlugin(filter: SitePluginFilterInput, limit: Int, skip: Int, sort: SitePluginSortInput): SitePluginConnection!
   directory(absolutePath: StringQueryOperatorInput, accessTime: DateQueryOperatorInput, atime: DateQueryOperatorInput, atimeMs: FloatQueryOperatorInput, base: StringQueryOperatorInput, birthTime: DateQueryOperatorInput, birthtime: DateQueryOperatorInput, birthtimeMs: FloatQueryOperatorInput, blksize: IntQueryOperatorInput, blocks: IntQueryOperatorInput, changeTime: DateQueryOperatorInput, children: NodeFilterListInput, ctime: DateQueryOperatorInput, ctimeMs: FloatQueryOperatorInput, dev: IntQueryOperatorInput, dir: StringQueryOperatorInput, ext: StringQueryOperatorInput, extension: StringQueryOperatorInput, gid: IntQueryOperatorInput, id: StringQueryOperatorInput, ino: FloatQueryOperatorInput, internal: InternalFilterInput, mode: IntQueryOperatorInput, modifiedTime: DateQueryOperatorInput, mtime: DateQueryOperatorInput, mtimeMs: FloatQueryOperatorInput, name: StringQueryOperatorInput, nlink: IntQueryOperatorInput, parent: NodeFilterInput, prettySize: StringQueryOperatorInput, rdev: IntQueryOperatorInput, relativeDirectory: StringQueryOperatorInput, relativePath: StringQueryOperatorInput, root: StringQueryOperatorInput, size: IntQueryOperatorInput, sourceInstanceName: StringQueryOperatorInput, uid: IntQueryOperatorInput): Directory
   file(absolutePath: StringQueryOperatorInput, accessTime: DateQueryOperatorInput, atime: DateQueryOperatorInput, atimeMs: FloatQueryOperatorInput, base: StringQueryOperatorInput, birthTime: DateQueryOperatorInput, birthtime: DateQueryOperatorInput, birthtimeMs: FloatQueryOperatorInput, blksize: IntQueryOperatorInput, blocks: IntQueryOperatorInput, changeTime: DateQueryOperatorInput, childImageSharp: ImageSharpFilterInput, childMarkdownRemark: MarkdownRemarkFilterInput, children: NodeFilterListInput, ctime: DateQueryOperatorInput, ctimeMs: FloatQueryOperatorInput, dev: IntQueryOperatorInput, dir: StringQueryOperatorInput, ext: StringQueryOperatorInput, extension: StringQueryOperatorInput, gid: IntQueryOperatorInput, id: StringQueryOperatorInput, ino: FloatQueryOperatorInput, internal: InternalFilterInput, mode: IntQueryOperatorInput, modifiedTime: DateQueryOperatorInput, mtime: DateQueryOperatorInput, mtimeMs: FloatQueryOperatorInput, name: StringQueryOperatorInput, nlink: IntQueryOperatorInput, parent: NodeFilterInput, prettySize: StringQueryOperatorInput, publicURL: StringQueryOperatorInput, rdev: IntQueryOperatorInput, relativeDirectory: StringQueryOperatorInput, relativePath: StringQueryOperatorInput, root: StringQueryOperatorInput, size: IntQueryOperatorInput, sourceInstanceName: StringQueryOperatorInput, uid: IntQueryOperatorInput): File
-  imageSharp(children: NodeFilterListInput, fixed: ImageSharpFixedFilterInput, fluid: ImageSharpFluidFilterInput, id: StringQueryOperatorInput, internal: InternalFilterInput, original: ImageSharpOriginalFilterInput, parent: NodeFilterInput, resize: ImageSharpResizeFilterInput, resolutions: ImageSharpResolutionsFilterInput, sizes: ImageSharpSizesFilterInput): ImageSharp
+  imageSharp(children: NodeFilterListInput, fixed: ImageSharpFixedFilterInput, fluid: ImageSharpFluidFilterInput, gatsbyImageData: JSONQueryOperatorInput, id: StringQueryOperatorInput, internal: InternalFilterInput, original: ImageSharpOriginalFilterInput, parent: NodeFilterInput, resize: ImageSharpResizeFilterInput, resolutions: ImageSharpResolutionsFilterInput, sizes: ImageSharpSizesFilterInput): ImageSharp
   markdownRemark(children: NodeFilterListInput, excerpt: StringQueryOperatorInput, excerptAst: JSONQueryOperatorInput, fields: MarkdownRemarkFieldsFilterInput, fileAbsolutePath: StringQueryOperatorInput, frontmatter: MarkdownRemarkFrontmatterFilterInput, headings: MarkdownHeadingFilterListInput, html: StringQueryOperatorInput, htmlAst: JSONQueryOperatorInput, id: StringQueryOperatorInput, internal: InternalFilterInput, parent: NodeFilterInput, rawMarkdownBody: StringQueryOperatorInput, tableOfContents: StringQueryOperatorInput, timeToRead: IntQueryOperatorInput, wordCount: MarkdownWordCountFilterInput): MarkdownRemark
-  mdx(body: StringQueryOperatorInput, children: NodeFilterListInput, excerpt: StringQueryOperatorInput, fileAbsolutePath: StringQueryOperatorInput, frontmatter: MdxFrontmatterFilterInput, headings: MdxHeadingMdxFilterListInput, html: StringQueryOperatorInput, id: StringQueryOperatorInput, internal: InternalFilterInput, mdxAST: JSONQueryOperatorInput, parent: NodeFilterInput, rawBody: StringQueryOperatorInput, tableOfContents: JSONQueryOperatorInput, timeToRead: IntQueryOperatorInput, wordCount: MdxWordCountFilterInput): Mdx
+  mdx(body: StringQueryOperatorInput, children: NodeFilterListInput, excerpt: StringQueryOperatorInput, fileAbsolutePath: StringQueryOperatorInput, frontmatter: MdxFrontmatterFilterInput, headings: MdxHeadingMdxFilterListInput, html: StringQueryOperatorInput, id: StringQueryOperatorInput, internal: InternalFilterInput, mdxAST: JSONQueryOperatorInput, parent: NodeFilterInput, rawBody: StringQueryOperatorInput, slug: StringQueryOperatorInput, tableOfContents: JSONQueryOperatorInput, timeToRead: IntQueryOperatorInput, wordCount: MdxWordCountFilterInput): Mdx
   site(buildTime: DateQueryOperatorInput, children: NodeFilterListInput, host: StringQueryOperatorInput, id: StringQueryOperatorInput, internal: InternalFilterInput, parent: NodeFilterInput, pathPrefix: StringQueryOperatorInput, polyfill: BooleanQueryOperatorInput, port: IntQueryOperatorInput, siteMetadata: SiteSiteMetadataFilterInput): Site
   siteBuildMetadata(buildTime: DateQueryOperatorInput, children: NodeFilterListInput, id: StringQueryOperatorInput, internal: InternalFilterInput, parent: NodeFilterInput): SiteBuildMetadata
   sitePage(children: NodeFilterListInput, component: StringQueryOperatorInput, componentChunkName: StringQueryOperatorInput, componentPath: StringQueryOperatorInput, context: SitePageContextFilterInput, id: StringQueryOperatorInput, internal: InternalFilterInput, internalComponentName: StringQueryOperatorInput, isCreatedByStatefulCreatePages: BooleanQueryOperatorInput, matchPath: StringQueryOperatorInput, parent: NodeFilterInput, path: StringQueryOperatorInput, pluginCreator: SitePluginFilterInput, pluginCreatorId: StringQueryOperatorInput): SitePage
@@ -718,6 +799,7 @@ type SitePageContext {
   next: SitePageContextNext
   previous: SitePageContextPrevious
   slug: String
+  tag: String
 }
 
 type SitePageContextFrontmatter {
@@ -838,35 +920,55 @@ type SitePluginPackageJsonPeerDependencies {
 
 type SitePluginPluginOptions {
   allExtensions: Boolean
+  anonymize: Boolean
   backgroundColor: String
   background_color: String
   base64Width: Int
+  cacheDigest: String
+  cache_busting_mode: String
+  className: String
+  crossOrigin: String
   defaultLayouts: SitePluginPluginOptionsDefaultLayouts
   defaultQuality: Int
   disableBgImage: Boolean
   disableBgImageOnAlpha: Boolean
   display: String
+  displayName: Boolean
+  extensions: [String]
   failOnError: Boolean
+  fileName: Boolean
+  head: Boolean
   icon: String
-  ignoreFileExtensions: [String]
+  include_favicon: Boolean
   isTSX: Boolean
   jsxPragma: String
+  legacy: Boolean
+  lessBabel: Boolean
   linkImagesToOriginal: Boolean
   loading: String
   markdownCaptions: Boolean
   maxWidth: Int
+  mediaTypes: [String]
+  minify: Boolean
   name: String
+  offsetY: Int
+  pageTransitionDelay: Int
   path: String
   pathCheck: Boolean
-  pathPrefix: String
   plugins: [SitePluginPluginOptionsPlugins]
+  pure: Boolean
+  quality: Int
+  respectDNT: Boolean
   short_name: String
   showCaptions: Boolean
   siteUrl: String
+  sizeByPixelDensity: Boolean
   start_url: String
   stripMetadata: Boolean
   theme_color: String
+  theme_color_in_head: Boolean
   tracedSVG: Boolean
+  transpileTemplateLiterals: Boolean
   withWebp: Boolean
   wrapperStyle: String
 }
@@ -879,6 +981,7 @@ type SitePluginPluginOptionsPlugins {
   browserAPIs: [String]
   id: String
   name: String
+  nodeAPIs: [String]
   pluginFilepath: String
   pluginOptions: SitePluginPluginOptionsPluginsPluginOptions
   resolve: String
@@ -888,15 +991,17 @@ type SitePluginPluginOptionsPlugins {
 
 type SitePluginPluginOptionsPluginsPluginOptions {
   backgroundColor: String
+  className: String
   disableBgImage: Boolean
   disableBgImageOnAlpha: Boolean
-  ignoreFileExtensions: [String]
   linkImagesToOriginal: Boolean
   loading: String
   markdownCaptions: Boolean
   maxWidth: Int
-  pathPrefix: String
+  offsetY: Int
+  quality: Int
   showCaptions: Boolean
+  sizeByPixelDensity: Boolean
   tracedSVG: Boolean
   withWebp: Boolean
   wrapperStyle: String
@@ -1091,6 +1196,7 @@ enum FileFieldsEnum {
   childImageSharp___fluid___srcSetWebp @deprecated(reason : "Sorting on fields that need arguments to resolve is deprecated.")
   childImageSharp___fluid___srcWebp @deprecated(reason : "Sorting on fields that need arguments to resolve is deprecated.")
   childImageSharp___fluid___tracedSVG @deprecated(reason : "Sorting on fields that need arguments to resolve is deprecated.")
+  childImageSharp___gatsbyImageData @deprecated(reason : "Sorting on fields that need arguments to resolve is deprecated.")
   childImageSharp___id @deprecated(reason : "Sorting on fields that need arguments to resolve is deprecated.")
   childImageSharp___internal___content @deprecated(reason : "Sorting on fields that need arguments to resolve is deprecated.")
   childImageSharp___internal___contentDigest @deprecated(reason : "Sorting on fields that need arguments to resolve is deprecated.")
@@ -1208,6 +1314,7 @@ enum FileFieldsEnum {
   childMarkdownRemark___frontmatter___title
   childMarkdownRemark___headings @deprecated(reason : "Sorting on fields that need arguments to resolve is deprecated.")
   childMarkdownRemark___headings___depth @deprecated(reason : "Sorting on fields that need arguments to resolve is deprecated.")
+  childMarkdownRemark___headings___id @deprecated(reason : "Sorting on fields that need arguments to resolve is deprecated.")
   childMarkdownRemark___headings___value @deprecated(reason : "Sorting on fields that need arguments to resolve is deprecated.")
   childMarkdownRemark___html @deprecated(reason : "Sorting on fields that need arguments to resolve is deprecated.")
   childMarkdownRemark___htmlAst @deprecated(reason : "Sorting on fields that need arguments to resolve is deprecated.")
@@ -1383,10 +1490,24 @@ enum ImageFit {
 }
 
 enum ImageFormat {
+  AUTO
   JPG
   NO_CHANGE
   PNG
   WEBP
+}
+
+enum ImageLayout {
+  CONSTRAINED
+  FIXED
+  FLUID
+}
+
+enum ImagePlaceholder {
+  BLURRED
+  DOMINANT_COLOR
+  NONE
+  TRACED_SVG
 }
 
 enum ImageSharpFieldsEnum {
@@ -1451,6 +1572,7 @@ enum ImageSharpFieldsEnum {
   fluid___srcSetWebp @deprecated(reason : "Sorting on fields that need arguments to resolve is deprecated.")
   fluid___srcWebp @deprecated(reason : "Sorting on fields that need arguments to resolve is deprecated.")
   fluid___tracedSVG @deprecated(reason : "Sorting on fields that need arguments to resolve is deprecated.")
+  gatsbyImageData @deprecated(reason : "Sorting on fields that need arguments to resolve is deprecated.")
   id @deprecated(reason : "Sorting on fields that need arguments to resolve is deprecated.")
   internal___content @deprecated(reason : "Sorting on fields that need arguments to resolve is deprecated.")
   internal___contentDigest @deprecated(reason : "Sorting on fields that need arguments to resolve is deprecated.")
@@ -1604,6 +1726,7 @@ enum MarkdownRemarkFieldsEnum {
   frontmatter___featuredImage___blocks
   frontmatter___featuredImage___changeTime
   frontmatter___featuredImage___childImageSharp___children @deprecated(reason : "Sorting on fields that need arguments to resolve is deprecated.")
+  frontmatter___featuredImage___childImageSharp___gatsbyImageData @deprecated(reason : "Sorting on fields that need arguments to resolve is deprecated.")
   frontmatter___featuredImage___childImageSharp___id @deprecated(reason : "Sorting on fields that need arguments to resolve is deprecated.")
   frontmatter___featuredImage___childMarkdownRemark___children @deprecated(reason : "Sorting on fields that need arguments to resolve is deprecated.")
   frontmatter___featuredImage___childMarkdownRemark___excerpt @deprecated(reason : "Sorting on fields that need arguments to resolve is deprecated.")
@@ -1659,6 +1782,7 @@ enum MarkdownRemarkFieldsEnum {
   frontmatter___title
   headings @deprecated(reason : "Sorting on fields that need arguments to resolve is deprecated.")
   headings___depth @deprecated(reason : "Sorting on fields that need arguments to resolve is deprecated.")
+  headings___id @deprecated(reason : "Sorting on fields that need arguments to resolve is deprecated.")
   headings___value @deprecated(reason : "Sorting on fields that need arguments to resolve is deprecated.")
   html @deprecated(reason : "Sorting on fields that need arguments to resolve is deprecated.")
   htmlAst @deprecated(reason : "Sorting on fields that need arguments to resolve is deprecated.")
@@ -1814,6 +1938,7 @@ enum MdxFieldsEnum {
   parent___parent___parent___children @deprecated(reason : "Sorting on fields that need arguments to resolve is deprecated.")
   parent___parent___parent___id @deprecated(reason : "Sorting on fields that need arguments to resolve is deprecated.")
   rawBody
+  slug
   tableOfContents @deprecated(reason : "Sorting on fields that need arguments to resolve is deprecated.")
   timeToRead @deprecated(reason : "Sorting on fields that need arguments to resolve is deprecated.")
   wordCount___paragraphs @deprecated(reason : "Sorting on fields that need arguments to resolve is deprecated.")
@@ -2074,6 +2199,7 @@ enum SitePageFieldsEnum {
   context___previous___frontmatter___tags
   context___previous___frontmatter___title
   context___slug
+  context___tag
   id
   internalComponentName
   internal___content
@@ -2184,42 +2310,63 @@ enum SitePageFieldsEnum {
   pluginCreator___parent___parent___id
   pluginCreator___pluginFilepath
   pluginCreator___pluginOptions___allExtensions
+  pluginCreator___pluginOptions___anonymize
   pluginCreator___pluginOptions___backgroundColor
   pluginCreator___pluginOptions___background_color
   pluginCreator___pluginOptions___base64Width
+  pluginCreator___pluginOptions___cacheDigest
+  pluginCreator___pluginOptions___cache_busting_mode
+  pluginCreator___pluginOptions___className
+  pluginCreator___pluginOptions___crossOrigin
   pluginCreator___pluginOptions___defaultLayouts___default
   pluginCreator___pluginOptions___defaultQuality
   pluginCreator___pluginOptions___disableBgImage
   pluginCreator___pluginOptions___disableBgImageOnAlpha
   pluginCreator___pluginOptions___display
+  pluginCreator___pluginOptions___displayName
+  pluginCreator___pluginOptions___extensions
   pluginCreator___pluginOptions___failOnError
+  pluginCreator___pluginOptions___fileName
+  pluginCreator___pluginOptions___head
   pluginCreator___pluginOptions___icon
-  pluginCreator___pluginOptions___ignoreFileExtensions
+  pluginCreator___pluginOptions___include_favicon
   pluginCreator___pluginOptions___isTSX
   pluginCreator___pluginOptions___jsxPragma
+  pluginCreator___pluginOptions___legacy
+  pluginCreator___pluginOptions___lessBabel
   pluginCreator___pluginOptions___linkImagesToOriginal
   pluginCreator___pluginOptions___loading
   pluginCreator___pluginOptions___markdownCaptions
   pluginCreator___pluginOptions___maxWidth
+  pluginCreator___pluginOptions___mediaTypes
+  pluginCreator___pluginOptions___minify
   pluginCreator___pluginOptions___name
+  pluginCreator___pluginOptions___offsetY
+  pluginCreator___pluginOptions___pageTransitionDelay
   pluginCreator___pluginOptions___path
   pluginCreator___pluginOptions___pathCheck
-  pluginCreator___pluginOptions___pathPrefix
   pluginCreator___pluginOptions___plugins
   pluginCreator___pluginOptions___plugins___browserAPIs
   pluginCreator___pluginOptions___plugins___id
   pluginCreator___pluginOptions___plugins___name
+  pluginCreator___pluginOptions___plugins___nodeAPIs
   pluginCreator___pluginOptions___plugins___pluginFilepath
   pluginCreator___pluginOptions___plugins___resolve
   pluginCreator___pluginOptions___plugins___ssrAPIs
   pluginCreator___pluginOptions___plugins___version
+  pluginCreator___pluginOptions___pure
+  pluginCreator___pluginOptions___quality
+  pluginCreator___pluginOptions___respectDNT
   pluginCreator___pluginOptions___short_name
   pluginCreator___pluginOptions___showCaptions
   pluginCreator___pluginOptions___siteUrl
+  pluginCreator___pluginOptions___sizeByPixelDensity
   pluginCreator___pluginOptions___start_url
   pluginCreator___pluginOptions___stripMetadata
   pluginCreator___pluginOptions___theme_color
+  pluginCreator___pluginOptions___theme_color_in_head
   pluginCreator___pluginOptions___tracedSVG
+  pluginCreator___pluginOptions___transpileTemplateLiterals
   pluginCreator___pluginOptions___withWebp
   pluginCreator___pluginOptions___wrapperStyle
   pluginCreator___resolve
@@ -2334,55 +2481,78 @@ enum SitePluginFieldsEnum {
   parent___parent___parent___id
   pluginFilepath
   pluginOptions___allExtensions
+  pluginOptions___anonymize
   pluginOptions___backgroundColor
   pluginOptions___background_color
   pluginOptions___base64Width
+  pluginOptions___cacheDigest
+  pluginOptions___cache_busting_mode
+  pluginOptions___className
+  pluginOptions___crossOrigin
   pluginOptions___defaultLayouts___default
   pluginOptions___defaultQuality
   pluginOptions___disableBgImage
   pluginOptions___disableBgImageOnAlpha
   pluginOptions___display
+  pluginOptions___displayName
+  pluginOptions___extensions
   pluginOptions___failOnError
+  pluginOptions___fileName
+  pluginOptions___head
   pluginOptions___icon
-  pluginOptions___ignoreFileExtensions
+  pluginOptions___include_favicon
   pluginOptions___isTSX
   pluginOptions___jsxPragma
+  pluginOptions___legacy
+  pluginOptions___lessBabel
   pluginOptions___linkImagesToOriginal
   pluginOptions___loading
   pluginOptions___markdownCaptions
   pluginOptions___maxWidth
+  pluginOptions___mediaTypes
+  pluginOptions___minify
   pluginOptions___name
+  pluginOptions___offsetY
+  pluginOptions___pageTransitionDelay
   pluginOptions___path
   pluginOptions___pathCheck
-  pluginOptions___pathPrefix
   pluginOptions___plugins
   pluginOptions___plugins___browserAPIs
   pluginOptions___plugins___id
   pluginOptions___plugins___name
+  pluginOptions___plugins___nodeAPIs
   pluginOptions___plugins___pluginFilepath
   pluginOptions___plugins___pluginOptions___backgroundColor
+  pluginOptions___plugins___pluginOptions___className
   pluginOptions___plugins___pluginOptions___disableBgImage
   pluginOptions___plugins___pluginOptions___disableBgImageOnAlpha
-  pluginOptions___plugins___pluginOptions___ignoreFileExtensions
   pluginOptions___plugins___pluginOptions___linkImagesToOriginal
   pluginOptions___plugins___pluginOptions___loading
   pluginOptions___plugins___pluginOptions___markdownCaptions
   pluginOptions___plugins___pluginOptions___maxWidth
-  pluginOptions___plugins___pluginOptions___pathPrefix
+  pluginOptions___plugins___pluginOptions___offsetY
+  pluginOptions___plugins___pluginOptions___quality
   pluginOptions___plugins___pluginOptions___showCaptions
+  pluginOptions___plugins___pluginOptions___sizeByPixelDensity
   pluginOptions___plugins___pluginOptions___tracedSVG
   pluginOptions___plugins___pluginOptions___withWebp
   pluginOptions___plugins___pluginOptions___wrapperStyle
   pluginOptions___plugins___resolve
   pluginOptions___plugins___ssrAPIs
   pluginOptions___plugins___version
+  pluginOptions___pure
+  pluginOptions___quality
+  pluginOptions___respectDNT
   pluginOptions___short_name
   pluginOptions___showCaptions
   pluginOptions___siteUrl
+  pluginOptions___sizeByPixelDensity
   pluginOptions___start_url
   pluginOptions___stripMetadata
   pluginOptions___theme_color
+  pluginOptions___theme_color_in_head
   pluginOptions___tracedSVG
+  pluginOptions___transpileTemplateLiterals
   pluginOptions___withWebp
   pluginOptions___wrapperStyle
   resolve
@@ -2393,6 +2563,13 @@ enum SitePluginFieldsEnum {
 enum SortOrderEnum {
   ASC
   DESC
+}
+
+input BlurredOptions {
+  "Force the output format for the low-res preview. Default is to use the same format as the input. You should rarely need to change this"
+  toFormat: ImageFormat
+  "Width of the generated low-res preview. Default is 20px"
+  width: Int
 }
 
 input BooleanQueryOperatorInput {
@@ -2527,6 +2704,7 @@ input ImageSharpFilterInput {
   children: NodeFilterListInput
   fixed: ImageSharpFixedFilterInput
   fluid: ImageSharpFluidFilterInput
+  gatsbyImageData: JSONQueryOperatorInput
   id: StringQueryOperatorInput
   internal: InternalFilterInput
   original: ImageSharpOriginalFilterInput
@@ -2634,6 +2812,11 @@ input InternalFilterInput {
   type: StringQueryOperatorInput
 }
 
+input JPGOptions {
+  progressive: Boolean = true
+  quality: Int
+}
+
 input JSONQueryOperatorInput {
   eq: JSON
   glob: JSON
@@ -2645,6 +2828,7 @@ input JSONQueryOperatorInput {
 
 input MarkdownHeadingFilterInput {
   depth: IntQueryOperatorInput
+  id: StringQueryOperatorInput
   value: StringQueryOperatorInput
 }
 
@@ -2709,6 +2893,7 @@ input MdxFilterInput {
   mdxAST: JSONQueryOperatorInput
   parent: NodeFilterInput
   rawBody: StringQueryOperatorInput
+  slug: StringQueryOperatorInput
   tableOfContents: JSONQueryOperatorInput
   timeToRead: IntQueryOperatorInput
   wordCount: MdxWordCountFilterInput
@@ -2747,6 +2932,11 @@ input NodeFilterInput {
 
 input NodeFilterListInput {
   elemMatch: NodeFilterInput
+}
+
+input PNGOptions {
+  compressionSpeed: Int = 4
+  quality: Int
 }
 
 input Potrace {
@@ -2792,6 +2982,7 @@ input SitePageContextFilterInput {
   next: SitePageContextNextFilterInput
   previous: SitePageContextPreviousFilterInput
   slug: StringQueryOperatorInput
+  tag: StringQueryOperatorInput
 }
 
 input SitePageContextFrontmatterFilterInput {
@@ -2911,35 +3102,55 @@ input SitePluginPluginOptionsDefaultLayoutsFilterInput {
 
 input SitePluginPluginOptionsFilterInput {
   allExtensions: BooleanQueryOperatorInput
+  anonymize: BooleanQueryOperatorInput
   backgroundColor: StringQueryOperatorInput
   background_color: StringQueryOperatorInput
   base64Width: IntQueryOperatorInput
+  cacheDigest: StringQueryOperatorInput
+  cache_busting_mode: StringQueryOperatorInput
+  className: StringQueryOperatorInput
+  crossOrigin: StringQueryOperatorInput
   defaultLayouts: SitePluginPluginOptionsDefaultLayoutsFilterInput
   defaultQuality: IntQueryOperatorInput
   disableBgImage: BooleanQueryOperatorInput
   disableBgImageOnAlpha: BooleanQueryOperatorInput
   display: StringQueryOperatorInput
+  displayName: BooleanQueryOperatorInput
+  extensions: StringQueryOperatorInput
   failOnError: BooleanQueryOperatorInput
+  fileName: BooleanQueryOperatorInput
+  head: BooleanQueryOperatorInput
   icon: StringQueryOperatorInput
-  ignoreFileExtensions: StringQueryOperatorInput
+  include_favicon: BooleanQueryOperatorInput
   isTSX: BooleanQueryOperatorInput
   jsxPragma: StringQueryOperatorInput
+  legacy: BooleanQueryOperatorInput
+  lessBabel: BooleanQueryOperatorInput
   linkImagesToOriginal: BooleanQueryOperatorInput
   loading: StringQueryOperatorInput
   markdownCaptions: BooleanQueryOperatorInput
   maxWidth: IntQueryOperatorInput
+  mediaTypes: StringQueryOperatorInput
+  minify: BooleanQueryOperatorInput
   name: StringQueryOperatorInput
+  offsetY: IntQueryOperatorInput
+  pageTransitionDelay: IntQueryOperatorInput
   path: StringQueryOperatorInput
   pathCheck: BooleanQueryOperatorInput
-  pathPrefix: StringQueryOperatorInput
   plugins: SitePluginPluginOptionsPluginsFilterListInput
+  pure: BooleanQueryOperatorInput
+  quality: IntQueryOperatorInput
+  respectDNT: BooleanQueryOperatorInput
   short_name: StringQueryOperatorInput
   showCaptions: BooleanQueryOperatorInput
   siteUrl: StringQueryOperatorInput
+  sizeByPixelDensity: BooleanQueryOperatorInput
   start_url: StringQueryOperatorInput
   stripMetadata: BooleanQueryOperatorInput
   theme_color: StringQueryOperatorInput
+  theme_color_in_head: BooleanQueryOperatorInput
   tracedSVG: BooleanQueryOperatorInput
+  transpileTemplateLiterals: BooleanQueryOperatorInput
   withWebp: BooleanQueryOperatorInput
   wrapperStyle: StringQueryOperatorInput
 }
@@ -2948,6 +3159,7 @@ input SitePluginPluginOptionsPluginsFilterInput {
   browserAPIs: StringQueryOperatorInput
   id: StringQueryOperatorInput
   name: StringQueryOperatorInput
+  nodeAPIs: StringQueryOperatorInput
   pluginFilepath: StringQueryOperatorInput
   pluginOptions: SitePluginPluginOptionsPluginsPluginOptionsFilterInput
   resolve: StringQueryOperatorInput
@@ -2961,15 +3173,17 @@ input SitePluginPluginOptionsPluginsFilterListInput {
 
 input SitePluginPluginOptionsPluginsPluginOptionsFilterInput {
   backgroundColor: StringQueryOperatorInput
+  className: StringQueryOperatorInput
   disableBgImage: BooleanQueryOperatorInput
   disableBgImageOnAlpha: BooleanQueryOperatorInput
-  ignoreFileExtensions: StringQueryOperatorInput
   linkImagesToOriginal: BooleanQueryOperatorInput
   loading: StringQueryOperatorInput
   markdownCaptions: BooleanQueryOperatorInput
   maxWidth: IntQueryOperatorInput
-  pathPrefix: StringQueryOperatorInput
+  offsetY: IntQueryOperatorInput
+  quality: IntQueryOperatorInput
   showCaptions: BooleanQueryOperatorInput
+  sizeByPixelDensity: BooleanQueryOperatorInput
   tracedSVG: BooleanQueryOperatorInput
   withWebp: BooleanQueryOperatorInput
   wrapperStyle: StringQueryOperatorInput
@@ -3010,6 +3224,19 @@ input StringQueryOperatorInput {
   ne: String
   nin: [String]
   regex: String
+}
+
+input TransformOptions {
+  cropFocus: ImageCropFocus = ATTENTION
+  duotone: DuotoneGradient
+  fit: ImageFit = COVER
+  grayscale: Boolean = false
+  rotate: Int = 0
+  trim: Float = 0.0
+}
+
+input WebPOptions {
+  quality: Int
 }
 
 
